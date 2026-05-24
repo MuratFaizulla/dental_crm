@@ -25,7 +25,7 @@ class ClientAccessMixin:
         if user.role == 'doctor':
             try:
                 doctor = user.doctors_profile
-            except Exception:
+            except AttributeError:
                 raise PermissionDenied
             if (client.doctor == doctor or
                     Record.objects.filter(doctor=doctor, client=client).exists()):
