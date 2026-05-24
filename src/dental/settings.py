@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users',
     'doctors',
     'records',
+    'medical',
     'api',
 ]
 
@@ -162,3 +163,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'TOKEN_OBTAIN_SERIALIZER': 'users.jwt.CustomTokenObtainPairSerializer',
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
