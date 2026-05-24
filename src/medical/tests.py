@@ -4,7 +4,9 @@ from rest_framework import status
 from users.models import User
 from doctors.models import Doctors, Service, Specialization
 from client.models import Client, Gender, FindOut
-from .models import MedicalNote, ToothRecord, TreatmentPlanItem
+from .models import MedicalNote, ToothRecord, TreatmentPlanItem, PatientFile
+import os
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class MedicalTestBase(TestCase):
@@ -162,3 +164,50 @@ class TreatmentPlanAPITest(MedicalTestBase):
         res = self.admin_client.delete(url)
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(TreatmentPlanItem.objects.count(), 0)
+
+
+class PatientFileAPITest(MedicalTestBase):
+    def test_upload_file_success(self):
+        url = f'/api/v1/medical/{self.patient.id}/files/'
+        small_file = SimpleUploadedFile('xray.jpg', b'fake-image-data', content_type='image/jpeg')
+        data = {'file': small_file, 'file_type': 'xray', 'description': 'Верхняя челюсть'}
+        res = self.admin_client.post(url, data, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(PatientFile.objects.count(), 1)
+
+    def test_upload_file_wrong_extension_rejected(self):
+        url = f'/api/v1/medical/{self.patient.id}/files/'
+        bad_file = SimpleUploadedFile('virus.exe', b'MZ', content_type='application/octet-stream')
+        data = {'file': bad_file, 'file_type': 'other'}
+        res = self.admin_client.post(url, data, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_upload_file_too_large_rejected(self):
+        url = f'/api/v1/medical/{self.patient.id}/files/'
+        large_content = b'x' * (21 * 1024 * 1024)
+        large_file = SimpleUploadedFile('big.jpg', large_content, content_type='image/jpeg')
+        data = {'file': large_file, 'file_type': 'photo'}
+        res = self.admin_client.post(url, data, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_files_list(self):
+        small_file = SimpleUploadedFile('xray.jpg', b'data', content_type='image/jpeg')
+        PatientFile.objects.create(
+            patient=self.patient, file=small_file,
+            file_type='xray', uploaded_by=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/files/'
+        res = self.admin_client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+
+    def test_delete_file_removes_record(self):
+        small_file = SimpleUploadedFile('xray.jpg', b'data', content_type='image/jpeg')
+        pf = PatientFile.objects.create(
+            patient=self.patient, file=small_file,
+            file_type='xray', uploaded_by=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/files/{pf.id}/'
+        res = self.admin_client.delete(url)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(PatientFile.objects.count(), 0)
