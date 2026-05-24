@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-c"]
 
 WORKDIR /DENTAL_CRM
 
-COPY requirements.txt /DENTAL_CRM/
-RUN pip install -r requirements.txt
+COPY backend/requirements.txt /DENTAL_CRM/backend/
+RUN pip install -r /DENTAL_CRM/backend/requirements.txt
 
 COPY . /DENTAL_CRM/
