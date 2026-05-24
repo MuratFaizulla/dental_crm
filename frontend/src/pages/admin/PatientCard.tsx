@@ -5,6 +5,7 @@ import { getPatient } from '../../api/patients'
 import { getRecords } from '../../api/records'
 import ToothFormula from '../../components/ToothFormula/ToothFormula'
 import TreatmentPlan from '../../components/TreatmentPlan/TreatmentPlan'
+import PatientFiles from './PatientFiles'
 import styles from './PatientCard.module.css'
 
 type Tab = 'info' | 'medical' | 'files'
@@ -113,11 +114,7 @@ export default function PatientCard() {
         </div>
       )}
 
-      {tab === 'files' && (
-        <div>
-          <p style={{ color: '#8c8c8c' }}>Файлы пациента (Task 11)</p>
-        </div>
-      )}
+      {tab === 'files' && <PatientFiles clientId={clientId} />}
     </div>
   )
 }
