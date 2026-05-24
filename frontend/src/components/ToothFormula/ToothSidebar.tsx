@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { updateTooth, addPlanItem, ToothRecord } from '../../api/medical'
+import { updateTooth, addPlanItem } from '../../api/medical'
+import type { ToothRecord } from '../../api/medical'
 import styles from './ToothSidebar.module.css'
 
 const STATUS_OPTIONS = [

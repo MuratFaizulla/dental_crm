@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getTeeth, ToothRecord } from '../../api/medical'
+import { getTeeth } from '../../api/medical'
+import type { ToothRecord } from '../../api/medical'
 import ToothSidebar from './ToothSidebar'
 import styles from './ToothFormula.module.css'
 

@@ -16,12 +16,12 @@ services:
   backend:
     build: .
     command: >
-      bash -c "cd /DENTAL_CRM/src &&
+      bash -c "cd /DENTAL_CRM/backend &&
                python manage.py migrate &&
                python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/DENTAL_CRM
-      - media_files:/DENTAL_CRM/src/media
+      - media_files:/DENTAL_CRM/backend/media
     ports:
       - "8000:8000"
     environment:

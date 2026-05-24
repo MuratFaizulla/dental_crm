@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getFiles, uploadFile, deleteFile, PatientFile } from '../../api/files'
+import { getFiles, uploadFile, deleteFile } from '../../api/files'
+import type { PatientFile } from '../../api/files'
 import styles from './PatientFiles.module.css'
 
 const FILE_TYPE_LABELS: Record<string, string> = {

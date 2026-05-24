@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  getPlan, updatePlanItem, deletePlanItem, TreatmentPlanItem,
-} from '../../api/medical'
+import { getPlan, updatePlanItem, deletePlanItem } from '../../api/medical'
+import type { TreatmentPlanItem } from '../../api/medical'
 import styles from './TreatmentPlan.module.css'
 
 const STATUS_OPTIONS = [
