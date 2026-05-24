@@ -19,10 +19,13 @@ class RecordViewSet(viewsets.ModelViewSet):
         ).order_by('-reception_day', '-created_at')
         reception_day = self.request.query_params.get('reception_day')
         doctor = self.request.query_params.get('doctor')
+        client_id = self.request.query_params.get('client_id')
         if reception_day:
             qs = qs.filter(reception_day=reception_day)
         if doctor:
             qs = qs.filter(doctor_id=doctor)
+        if client_id:
+            qs = qs.filter(client=client_id)
         return qs
 
     def get_permissions(self):
