@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getRecords, type AppointmentRecord } from '../../api/records'
 import styles from './Schedule.module.css'
@@ -15,6 +15,7 @@ function cardClass(status: string) {
 }
 
 export default function Schedule() {
+  const navigate = useNavigate()
   const today = toISO(new Date())
   const [date, setDate] = useState(today)
 
@@ -69,6 +70,12 @@ export default function Schedule() {
                 <div className={styles.payState}>{r.payment_state_title}</div>
               </div>
               <div className={styles.statusBadge}>{r.status_title}</div>
+              <button
+                className={styles.medCardBtn}
+                onClick={() => navigate(`/admin/patients/${r.client}`)}
+              >
+                Медкарта
+              </button>
             </div>
           ))}
           {data?.results.length === 0 && (

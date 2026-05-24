@@ -73,6 +73,10 @@
   cursor: pointer;
 }
 
+.row:hover {
+  background: #f5f5f5;
+}
+
 .name {
   font-weight: 500;
   color: #1a1a1a;

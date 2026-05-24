@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getPatients } from '../../api/patients'
 import styles from './Patients.module.css'
 
 export default function Patients() {
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [q, setQ] = useState('')
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -47,7 +49,12 @@ export default function Patients() {
             </thead>
             <tbody>
               {data?.results.map((p) => (
-                <tr key={p.id}>
+                <tr
+                  key={p.id}
+                  className={styles.row}
+                  onClick={() => navigate(`/admin/patients/${p.id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td className={styles.name}>{p.full_name}</td>
                   <td className={styles.secondary}>{p.mobile_phone ?? '—'}</td>
                   <td className={styles.mono}>{p.iin ?? '—'}</td>
