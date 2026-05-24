@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-+gof668q-(#mrssa&oo_#!ztzl7m3+h%8=*w8xr_rlcp_(dc#=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -83,17 +84,16 @@ WSGI_APPLICATION = 'dental.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-
-DATABASES = { 
-    'default': { 
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': 'dental_base', 
-        'USER': 'dental', 
-        'PASSWORD': 'dental123', 
-        'HOST': 'localhost', 
-        'PORT': '5432', 
-        } 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dental_base',
+        'USER': 'dental',
+        'PASSWORD': 'dental123',
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': '5432',
     }
+}
 
 
 AUTH_USER_MODEL = 'users.User'
