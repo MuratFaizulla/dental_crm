@@ -21,3 +21,6 @@ export async function getPatients(search?: string): Promise<Paginated<Patient>> 
   const { data } = await api.get<Paginated<Patient>>('/clients/', { params: search ? { search } : {} })
   return data
 }
+
+export const getPatient = (id: number) =>
+  api.get<Patient>(`/clients/${id}/`).then(r => r.data)

@@ -17,7 +17,7 @@ export interface AppointmentRecord {
   payment_state_title: string
 }
 
-export async function getRecords(params: { reception_day?: string; doctor?: number } = {}) {
+export async function getRecords(params: { reception_day?: string; doctor?: number; client_id?: number } = {}) {
   const { data } = await api.get<Paginated<AppointmentRecord>>('/records/', { params })
   return data
 }
