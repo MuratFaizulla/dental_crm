@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getPatient } from '../../api/patients'
 import { getRecords } from '../../api/records'
+import ToothFormula from '../../components/ToothFormula/ToothFormula'
 import styles from './PatientCard.module.css'
 
 type Tab = 'info' | 'medical' | 'files'
@@ -106,7 +107,7 @@ export default function PatientCard() {
 
       {tab === 'medical' && (
         <div>
-          <p style={{ color: '#8c8c8c' }}>Зубная формула и план лечения (Task 9)</p>
+          <ToothFormula clientId={clientId} />
         </div>
       )}
 
