@@ -1,5 +1,8 @@
+import os
+
 from django.db import models
 from django.conf import settings
+from django.utils.text import get_valid_filename
 from client.models import Client
 from doctors.models import Service
 
@@ -7,6 +10,7 @@ from doctors.models import Service
 def patient_file_path(instance, filename):
     from datetime import date
     today = date.today()
+    filename = get_valid_filename(os.path.basename(filename))
     return f'patients/{instance.patient_id}/{today.year}/{today.month}/{filename}'
 
 
@@ -23,6 +27,9 @@ class MedicalNote(models.Model):
     class Meta:
         verbose_name = 'Медицинская заметка'
         verbose_name_plural = 'Медицинские заметки'
+
+    def __str__(self):
+        return f'Медкарта: {self.patient}'
 
 
 class ToothRecord(models.Model):
@@ -49,6 +56,9 @@ class ToothRecord(models.Model):
         unique_together = [('patient', 'tooth_number')]
         verbose_name = 'Статус зуба'
         verbose_name_plural = 'Статусы зубов'
+
+    def __str__(self):
+        return f'Зуб {self.tooth_number} — {self.patient}'
 
 
 class TreatmentPlanItem(models.Model):
@@ -80,6 +90,9 @@ class TreatmentPlanItem(models.Model):
         verbose_name_plural = 'Пункты плана лечения'
         ordering = ['-created_at']
 
+    def __str__(self):
+        return f'Зуб {self.tooth_number}: {self.diagnosis[:40]}'
+
 
 class PatientFile(models.Model):
     FILE_TYPE_CHOICES = [
@@ -106,3 +119,6 @@ class PatientFile(models.Model):
         verbose_name = 'Файл пациента'
         verbose_name_plural = 'Файлы пациентов'
         ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return f'{self.get_file_type_display()} — {self.patient}'
