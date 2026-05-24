@@ -21,6 +21,7 @@ services:
                python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/DENTAL_CRM
+      - media_files:/DENTAL_CRM/src/media
     ports:
       - "8000:8000"
     environment:
@@ -46,3 +47,4 @@ services:
 
 volumes:
   postgres_data:
+  media_files:
