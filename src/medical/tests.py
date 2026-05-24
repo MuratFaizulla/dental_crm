@@ -4,7 +4,7 @@ from rest_framework import status
 from users.models import User
 from doctors.models import Doctors, Service, Specialization
 from client.models import Client, Gender, FindOut
-from .models import MedicalNote, ToothRecord
+from .models import MedicalNote, ToothRecord, TreatmentPlanItem
 
 
 class MedicalTestBase(TestCase):
@@ -100,3 +100,65 @@ class ToothRecordAPITest(MedicalTestBase):
         self.assertEqual(ToothRecord.objects.filter(patient=self.patient, tooth_number='36').count(), 1)
         tooth = ToothRecord.objects.get(patient=self.patient, tooth_number='36')
         self.assertEqual(tooth.status, 'treated')
+
+
+class TreatmentPlanAPITest(MedicalTestBase):
+    def test_admin_post_plan_item(self):
+        url = f'/api/v1/medical/{self.patient.id}/plan/'
+        data = {
+            'tooth_number': '36',
+            'diagnosis': 'Кариес средний',
+            'treatment': 'Пломба композитная',
+        }
+        res = self.admin_client.post(url, data, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(TreatmentPlanItem.objects.count(), 1)
+        self.assertEqual(res.data['status'], 'planned')
+
+    def test_admin_get_plan_list(self):
+        TreatmentPlanItem.objects.create(
+            patient=self.patient, tooth_number='36',
+            diagnosis='Кариес', treatment='Пломба',
+            doctor=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/plan/'
+        res = self.admin_client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+
+    def test_patch_status_done_updates_tooth(self):
+        item = TreatmentPlanItem.objects.create(
+            patient=self.patient, tooth_number='16',
+            diagnosis='Пульпит', treatment='Депульпирование',
+            doctor=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/plan/{item.id}/'
+        res = self.admin_client.patch(url, {'status': 'done'}, format='json')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        tooth = ToothRecord.objects.get(patient=self.patient, tooth_number='16')
+        self.assertEqual(tooth.status, 'treated')
+
+    def test_patch_status_postponed_saves_reason(self):
+        item = TreatmentPlanItem.objects.create(
+            patient=self.patient, tooth_number='46',
+            diagnosis='Кариес', treatment='Пломба',
+            doctor=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/plan/{item.id}/'
+        res = self.admin_client.patch(
+            url, {'status': 'postponed', 'postpone_reason': 'Пациент уехал'}, format='json'
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        item.refresh_from_db()
+        self.assertEqual(item.postpone_reason, 'Пациент уехал')
+
+    def test_delete_plan_item(self):
+        item = TreatmentPlanItem.objects.create(
+            patient=self.patient, tooth_number='26',
+            diagnosis='Кариес', treatment='Пломба',
+            doctor=self.admin,
+        )
+        url = f'/api/v1/medical/{self.patient.id}/plan/{item.id}/'
+        res = self.admin_client.delete(url)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(TreatmentPlanItem.objects.count(), 0)
