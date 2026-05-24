@@ -35,8 +35,8 @@ class PaymentStateSerializer(serializers.ModelSerializer):
 class RecordSerializer(serializers.ModelSerializer):
     status_title        = serializers.CharField(source="status.title", read_only=True)
     doctor_name         = serializers.SerializerMethodField()
-    chair_title         = serializers.CharField(source="chair.title", read_only=True, default="")
-    payment_state_title = serializers.CharField(source="payment_state.title", read_only=True, default="")
+    chair_title         = serializers.SerializerMethodField()
+    payment_state_title = serializers.SerializerMethodField()
 
     class Meta:
         model = Record
@@ -59,3 +59,9 @@ class RecordSerializer(serializers.ModelSerializer):
         if obj.doctor:
             return f"{obj.doctor.last_name} {obj.doctor.first_name}"
         return ""
+
+    def get_chair_title(self, obj):
+        return obj.chair.title if obj.chair else ""
+
+    def get_payment_state_title(self, obj):
+        return obj.payment_state.title if obj.payment_state else ""
