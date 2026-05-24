@@ -7,4 +7,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include('doctors.urls')),
     path('', include('client.urls')),
+    path('', include('records.urls')),
 ]
