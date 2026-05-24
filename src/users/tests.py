@@ -35,3 +35,4 @@ class JWTClaimsTest(TestCase):
         token = AccessToken(response.data['access'])
         self.assertEqual(token['role'], 'admin')
         self.assertEqual(token['email'], 'admin@clinic.com')
+        self.assertEqual(token['full_name'], 'Беков Ғани')
