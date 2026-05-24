@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getPatient } from '../../api/patients'
 import { getRecords } from '../../api/records'
 import ToothFormula from '../../components/ToothFormula/ToothFormula'
+import TreatmentPlan from '../../components/TreatmentPlan/TreatmentPlan'
 import styles from './PatientCard.module.css'
 
 type Tab = 'info' | 'medical' | 'files'
@@ -108,6 +109,7 @@ export default function PatientCard() {
       {tab === 'medical' && (
         <div>
           <ToothFormula clientId={clientId} />
+          <TreatmentPlan clientId={clientId} />
         </div>
       )}
 

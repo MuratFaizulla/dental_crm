@@ -1,0 +1,100 @@
+.section {
+  margin-top: 32px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.empty {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.tooth {
+  font-size: 12px;
+  font-weight: 600;
+  background: #e6f4ff;
+  color: #1677ff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.diagnosis {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.treatment {
+  font-size: 13px;
+  color: #595959;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.due {
+  font-size: 12px;
+  color: #8c8c8c;
+  white-space: nowrap;
+}
+
+.statusSelect {
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.postponeInput {
+  padding: 4px 8px;
+  border: 1px solid #faad14;
+  border-radius: 6px;
+  font-size: 13px;
+  width: 160px;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ff4d4f;
+  font-size: 18px;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.deleteBtn:hover {
+  opacity: 0.7;
+}
