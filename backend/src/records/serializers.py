@@ -2,6 +2,31 @@ from rest_framework import serializers
 from .models import Record, Status, ChairNum, RecordingType, PaymentType, PaymentState
 
 
+class CalendarRecordSerializer(serializers.ModelSerializer):
+    status_title = serializers.CharField(source='status.title', read_only=True)
+    doctor_name = serializers.SerializerMethodField()
+    chair_title = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Record
+        fields = [
+            'id',
+            'client', 'client_first_name', 'client_last_name', 'client_father_name',
+            'doctor', 'doctor_name',
+            'chair', 'chair_title',
+            'record_start', 'record_end', 'reception_day',
+            'status', 'status_title',
+        ]
+
+    def get_doctor_name(self, obj: Record) -> str:
+        if obj.doctor:
+            return f'{obj.doctor.last_name} {obj.doctor.first_name}'
+        return ''
+
+    def get_chair_title(self, obj: Record) -> str:
+        return obj.chair.title if obj.chair else ''
+
+
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status

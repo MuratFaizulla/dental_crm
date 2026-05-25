@@ -28,8 +28,8 @@ interface Props {
   onSaved: () => void
 }
 
-export default function ToothSidebar({ clientId, toothNumber, record, onClose, onSaved }: Props) {
-  const [statusVal, setStatusVal] = useState(record?.status ?? 'healthy')
+export default function ToothSidebar({ clientId, toothNumber, record, onSaved }: Props) {
+  const [statusVal, setStatusVal] = useState<ToothRecord['status']>(record?.status ?? 'healthy')
   const [notes, setNotes] = useState(record?.notes ?? '')
   const [showPlanForm, setShowPlanForm] = useState(false)
   const [diagnosis, setDiagnosis] = useState('')
@@ -77,7 +77,7 @@ export default function ToothSidebar({ clientId, toothNumber, record, onClose, o
         <select
           className={styles.select}
           value={statusVal}
-          onChange={e => setStatusVal(e.target.value)}
+          onChange={e => setStatusVal(e.target.value as ToothRecord['status'])}
         >
           {STATUS_OPTIONS.map(o => (
             <option key={o.value} value={o.value}>{o.label}</option>

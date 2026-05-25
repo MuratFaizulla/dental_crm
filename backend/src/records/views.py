@@ -1,8 +1,11 @@
 from rest_framework import viewsets, filters
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from api.permissions import IsAdmin, IsAdminOrDoctor
 from .models import Record, Status, ChairNum, RecordingType, PaymentType, PaymentState
 from .serializers import (
-    RecordSerializer, StatusSerializer, ChairNumSerializer,
+    RecordSerializer, CalendarRecordSerializer,
+    StatusSerializer, ChairNumSerializer,
     RecordingTypeSerializer, PaymentTypeSerializer, PaymentStateSerializer,
 )
 
@@ -29,9 +32,63 @@ class RecordViewSet(viewsets.ModelViewSet):
         return qs
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'calendar', 'slots']:
             return [IsAdminOrDoctor()]
         return [IsAdmin()]
+
+    @action(detail=False, methods=['get'], url_path='calendar')
+    def calendar(self, request):
+        date_from = request.query_params.get('date_from')
+        date_to = request.query_params.get('date_to')
+        doctor = request.query_params.get('doctor')
+        chair = request.query_params.get('chair')
+
+        qs = Record.objects.select_related(
+            'client', 'doctor', 'chair', 'status',
+        ).order_by('reception_day', 'record_start')
+
+        if date_from:
+            qs = qs.filter(reception_day__gte=date_from)
+        if date_to:
+            qs = qs.filter(reception_day__lte=date_to)
+        if doctor:
+            qs = qs.filter(doctor_id=doctor)
+        if chair:
+            qs = qs.filter(chair_id=chair)
+
+        serializer = CalendarRecordSerializer(qs, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='slots')
+    def slots(self, request):
+        doctor_id = request.query_params.get('doctor')
+        date = request.query_params.get('date')
+
+        qs = Record.objects.filter(
+            doctor_id=doctor_id,
+            reception_day=date,
+        ).values('id', 'record_start', 'record_end')
+
+        return Response(list(qs))
+
+    @action(detail=False, methods=['post'], url_path='check-conflict')
+    def check_conflict(self, request):
+        doctor_id = request.data.get('doctor')
+        date = request.data.get('date')
+        start = request.data.get('record_start')
+        end = request.data.get('record_end')
+        exclude_id = request.data.get('exclude_id')
+
+        qs = Record.objects.filter(
+            doctor_id=doctor_id,
+            reception_day=date,
+            record_start__lt=end,
+            record_end__gt=start,
+        )
+        if exclude_id:
+            qs = qs.exclude(id=exclude_id)
+
+        return Response({'conflict': qs.exists()})
 
 
 class StatusViewSet(viewsets.ModelViewSet):

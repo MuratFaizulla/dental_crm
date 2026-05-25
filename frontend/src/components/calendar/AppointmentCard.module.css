@@ -1,0 +1,51 @@
+.card {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 11px;
+  cursor: grab;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-left: 3px solid transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  transition: opacity 0.15s;
+  user-select: none;
+}
+
+.card:active { cursor: grabbing; }
+
+.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.time {
+  font-size: 10px;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+.name {
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doctor {
+  font-size: 10px;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waiting  { background: #dbeafe; border-left-color: #3b82f6; color: #1e3a8a; }
+.active   { background: #dcfce7; border-left-color: #22c55e; color: #14532d; }
+.done     { background: #f1f5f9; border-left-color: #94a3b8; color: #475569; }
+.canceled { background: #fee2e2; border-left-color: #ef4444; color: #7f1d1d; }
