@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getFiles, uploadFile, deleteFile } from '../../api/files'
+import { getFiles, uploadFile, deleteFile, fetchFileBlob } from '../../api/files'
 import type { PatientFile } from '../../api/files'
+import { useAuthedFileUrl } from '../../hooks/useAuthedFileUrl'
 import styles from './PatientFiles.module.css'
 
 const FILE_TYPE_LABELS: Record<string, string> = {
@@ -18,11 +19,73 @@ const FILE_TYPE_ICONS: Record<string, string> = {
   other: '📎',
 }
 
-const IMAGE_EXTS = new Set(['jpg', 'jpeg', 'png', 'webp'])
+function isImageType(fileType: string) {
+  return fileType === 'xray' || fileType === 'photo'
+}
 
-function isImage(url: string) {
-  const ext = url.split('.').pop()?.toLowerCase() ?? ''
-  return IMAGE_EXTS.has(ext)
+interface FileCardProps {
+  f: PatientFile
+  onPreview: (blobUrl: string) => void
+  onDelete: (id: number) => void
+}
+
+function FileCard({ f, onPreview, onDelete }: FileCardProps) {
+  const isImg = isImageType(f.file_type)
+  const blobUrl = useAuthedFileUrl(isImg ? f.id : null)
+
+  function handleOpen() {
+    if (isImg) {
+      if (blobUrl) onPreview(blobUrl)
+    } else {
+      fetchFileBlob(f.id).then(url => {
+        if (f.file_type === 'document') {
+          window.open(url, '_blank')
+        } else {
+          const a = document.createElement('a')
+          a.href = url
+          a.download = `file_${f.id}`
+          a.click()
+          setTimeout(() => URL.revokeObjectURL(url), 1000)
+        }
+      })
+    }
+  }
+
+  return (
+    <div className={styles.card}>
+      {isImg ? (
+        blobUrl ? (
+          <img
+            src={blobUrl}
+            alt={f.description}
+            className={styles.cardThumbImg}
+            onClick={handleOpen}
+          />
+        ) : (
+          <div className={styles.cardThumb} onClick={handleOpen}>
+            {FILE_TYPE_ICONS[f.file_type] ?? '📎'}
+          </div>
+        )
+      ) : (
+        <div className={styles.cardThumb} onClick={handleOpen}>
+          {FILE_TYPE_ICONS[f.file_type] ?? '📎'}
+        </div>
+      )}
+      <div className={styles.cardBody}>
+        <p className={styles.cardType}>{FILE_TYPE_LABELS[f.file_type]}</p>
+        <p className={styles.cardDesc}>{f.description || '—'}</p>
+        <p className={styles.cardMeta}>
+          {f.tooth_number ? `Зуб ${f.tooth_number} · ` : ''}
+          {new Date(f.uploaded_at).toLocaleDateString('ru-RU')}
+        </p>
+      </div>
+      <div className={styles.cardActions}>
+        <button className={styles.delBtn} onClick={() => onDelete(f.id)}>
+          Удалить
+        </button>
+      </div>
+    </div>
+  )
 }
 
 interface Props {
@@ -65,19 +128,6 @@ export default function PatientFiles({ clientId }: Props) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['files', clientId] }),
   })
 
-  function openFile(file: PatientFile) {
-    if (isImage(file.file)) {
-      setPreview(file.file)
-    } else if (file.file.endsWith('.pdf')) {
-      window.open(file.file, '_blank')
-    } else {
-      const a = document.createElement('a')
-      a.href = file.file
-      a.download = file.file.split('/').pop() ?? 'file'
-      a.click()
-    }
-  }
-
   return (
     <div>
       <div className={styles.toolbar}>
@@ -92,33 +142,12 @@ export default function PatientFiles({ clientId }: Props) {
 
       <div className={styles.grid}>
         {files.map(f => (
-          <div key={f.id} className={styles.card}>
-            {isImage(f.file) ? (
-              <img
-                src={f.file}
-                alt={f.description}
-                className={styles.cardThumbImg}
-                onClick={() => openFile(f)}
-              />
-            ) : (
-              <div className={styles.cardThumb} onClick={() => openFile(f)}>
-                {FILE_TYPE_ICONS[f.file_type] ?? '📎'}
-              </div>
-            )}
-            <div className={styles.cardBody}>
-              <p className={styles.cardType}>{FILE_TYPE_LABELS[f.file_type]}</p>
-              <p className={styles.cardDesc}>{f.description || '—'}</p>
-              <p className={styles.cardMeta}>
-                {f.tooth_number ? `Зуб ${f.tooth_number} · ` : ''}
-                {new Date(f.uploaded_at).toLocaleDateString('ru-RU')}
-              </p>
-            </div>
-            <div className={styles.cardActions}>
-              <button className={styles.delBtn} onClick={() => del.mutate(f.id)}>
-                Удалить
-              </button>
-            </div>
-          </div>
+          <FileCard
+            key={f.id}
+            f={f}
+            onPreview={url => setPreview(url)}
+            onDelete={id => del.mutate(id)}
+          />
         ))}
       </div>
 

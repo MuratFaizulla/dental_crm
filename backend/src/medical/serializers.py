@@ -40,6 +40,13 @@ class PatientFileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Размер файла превышает 20 МБ.')
         return value
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        url = f'/api/v1/medical/files/{instance.id}/download/'
+        data['file'] = request.build_absolute_uri(url) if request else url
+        return data
+
     class Meta:
         model = PatientFile
         fields = [

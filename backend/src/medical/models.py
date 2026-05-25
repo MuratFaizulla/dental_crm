@@ -1,8 +1,8 @@
 import os
+import uuid
 
 from django.db import models
 from django.conf import settings
-from django.utils.text import get_valid_filename
 from client.models import Client
 from doctors.models import Service
 
@@ -10,8 +10,8 @@ from doctors.models import Service
 def patient_file_path(instance, filename):
     from datetime import date
     today = date.today()
-    filename = get_valid_filename(os.path.basename(filename))
-    return f'patients/{instance.patient_id}/{today.year}/{today.month}/{filename}'
+    ext = os.path.splitext(filename)[1].lower()
+    return f'patients/{instance.patient_id}/{today.year}/{today.month}/{uuid.uuid4().hex}{ext}'
 
 
 class MedicalNote(models.Model):

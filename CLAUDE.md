@@ -151,6 +151,35 @@ Target: **80% coverage minimum** on all apps.
 /pr
 ```
 
+## Frontend
+
+Stack: React 19, Vite 8, TypeScript ~6, React Router v7, TanStack Query, Zustand, Axios
+
+```bash
+# Dev server (proxies /api to Django on :8000)
+cd frontend && npm run dev
+
+# Type-check + build
+cd frontend && npm run build
+
+# Lint
+cd frontend && npm run lint
+```
+
+### Key frontend files
+
+- `src/api/client.ts` — axios instance, 401 auto-refresh interceptor
+- `src/store/authStore.ts` — Zustand auth state (JWT + role)
+- `src/pages/Login.tsx` — login page
+- `src/components/ProtectedRoute.tsx` — role-based route guard
+
+## Conventions
+
+- **UI language:** Russian — all user-facing text, labels, error messages in Russian
+- **API client:** use the axios instance from `frontend/src/api/client.ts` (handles auth headers and 401 refresh); do not create bare `axios` calls
+- **State management:** Zustand for auth and global client state; TanStack Query for all server state (fetching, caching, mutations)
+- **Adding an API endpoint:** always update both sides — Django URL + view on the backend, and a corresponding function in `frontend/src/api/` on the frontend
+
 ## Git Conventions
 
 - `feat:` new features, `fix:` bug fixes, `refactor:` non-functional changes

@@ -21,3 +21,7 @@ export const uploadFile = (clientId: number, formData: FormData) =>
 
 export const deleteFile = (clientId: number, fileId: number) =>
   api.delete(`/medical/${clientId}/files/${fileId}/`)
+
+export const fetchFileBlob = (fileId: number): Promise<string> =>
+  api.get<Blob>(`/medical/files/${fileId}/download/`, { responseType: 'blob' })
+    .then(r => URL.createObjectURL(r.data))
