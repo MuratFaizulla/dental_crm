@@ -8,6 +8,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            sql="""
+                ALTER TABLE records_record
+                  ALTER COLUMN record_start TYPE time WITHOUT TIME ZONE USING NULL,
+                  ALTER COLUMN record_end   TYPE time WITHOUT TIME ZONE USING NULL;
+            """,
+            reverse_sql="""
+                ALTER TABLE records_record
+                  ALTER COLUMN record_start TYPE date USING NULL,
+                  ALTER COLUMN record_end   TYPE date USING NULL;
+            """,
+        ),
         migrations.AlterField(
             model_name='record',
             name='record_start',
