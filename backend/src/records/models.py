@@ -98,7 +98,7 @@ class Record(models.Model):
     recording_type = models.ForeignKey(RecordingType, verbose_name="Тип записи", on_delete=models.SET_NULL, null=True)
     notes = models.TextField("Примечания", blank=True, default='')
     reason = models.TextField("Причина", blank=True, default='')
-    reception_day = models.DateField(default='datetime.date.today')
+    reception_day = models.DateField(default='datetime.date.today', db_index=True)
     chair = models.ForeignKey(ChairNum, verbose_name="Номер кабинета", on_delete=models.SET_NULL, null=True)
     payment_type = models.ForeignKey(PaymentType, verbose_name="Тип оплаты", on_delete=models.SET_NULL, null=True)
     payment_state = models.ForeignKey(PaymentState, verbose_name="Состояние оплаты", on_delete=models.SET_NULL, null=True)

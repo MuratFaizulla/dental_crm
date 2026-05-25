@@ -5,19 +5,19 @@ from .serializers import DoctorSerializer, AssistantSerializer, SpecializationSe
 
 
 class SpecializationViewSet(viewsets.ModelViewSet):
-    queryset = Specialization.objects.all()
+    queryset = Specialization.objects.order_by('title')
     serializer_class = SpecializationSerializer
     permission_classes = [IsAdminOrDoctor]
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
-    queryset = Service.objects.select_related('spec_id').all()
+    queryset = Service.objects.select_related('spec_id').order_by('title')
     serializer_class = ServiceSerializer
     permission_classes = [IsAdminOrDoctor]
 
 
 class DoctorViewSet(viewsets.ModelViewSet):
-    queryset = Doctors.objects.select_related('services_id').all()
+    queryset = Doctors.objects.select_related('services_id').order_by('last_name', 'first_name')
     serializer_class = DoctorSerializer
 
     def get_permissions(self):
@@ -27,6 +27,6 @@ class DoctorViewSet(viewsets.ModelViewSet):
 
 
 class AssistantViewSet(viewsets.ModelViewSet):
-    queryset = Assistant.objects.all()
+    queryset = Assistant.objects.order_by('last_name', 'first_name')
     serializer_class = AssistantSerializer
     permission_classes = [IsAdminOrDoctor]
