@@ -1,0 +1,45 @@
+.page { padding: 24px; }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin: 0; }
+.totalBadge {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #cf1322;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tableWrap {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+}
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th {
+  background: #fafafa;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 500;
+  color: #555;
+  border-bottom: 1px solid #e8e8e8;
+}
+.table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.table tr:last-child td { border-bottom: none; }
+.row { cursor: pointer; }
+.row:hover td { background: #fafafa; }
+.debt { font-weight: 600; color: #cf1322; }
+
+.empty { padding: 40px; text-align: center; color: #aaa; font-size: 14px; }

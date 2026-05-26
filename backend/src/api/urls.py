@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include('client.urls')),
     path('', include('records.urls')),
     path('', include('medical.urls')),
+    path('', include('payments.urls')),
 ]

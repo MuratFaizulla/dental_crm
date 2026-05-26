@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'records',
     'medical',
     'api',
+    'payments',
 ]
 
 MIDDLEWARE = [

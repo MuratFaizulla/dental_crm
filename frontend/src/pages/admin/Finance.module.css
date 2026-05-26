@@ -1,0 +1,70 @@
+.page { padding: 24px; }
+
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin: 0; }
+
+.filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.filterLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+}
+.dateInput {
+  padding: 6px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.summaryRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.summaryCard {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 16px 20px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.summaryLabel { font-size: 12px; color: #888; }
+.summaryValue { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+.summaryCount { font-size: 12px; color: #aaa; }
+
+.tableWrap {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+}
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th {
+  background: #fafafa;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 500;
+  color: #555;
+  border-bottom: 1px solid #e8e8e8;
+}
+.table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #fafafa; }
+.amount { font-weight: 600; color: #1a1a1a; }
+
+.empty { padding: 40px; text-align: center; color: #aaa; font-size: 14px; }

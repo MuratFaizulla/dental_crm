@@ -5,6 +5,8 @@ import styles from './Layout.module.css'
 const NAV_ITEMS = [
   { to: '/admin/schedule', label: 'Расписание' },
   { to: '/admin/patients', label: 'Пациенты' },
+  { to: '/admin/finance', label: 'Финансы' },
+  { to: '/admin/debts', label: 'Должники' },
 ]
 
 export default function AdminLayout() {
