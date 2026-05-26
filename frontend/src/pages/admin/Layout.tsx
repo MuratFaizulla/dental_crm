@@ -12,6 +12,7 @@ const NAV_ITEMS = [
 
 const ADMIN_ONLY_ITEMS = [
   { to: '/admin/users', label: 'Сотрудники' },
+  { to: '/admin/analytics', label: 'Аналитика' },
   { to: '/admin/sms-log', label: 'SMS' },
   { to: '/admin/settings', label: 'Настройки' },
 ]
