@@ -26,6 +26,7 @@ services:
       - "8000:8000"
     environment:
       - DB_HOST=db
+      - DB_PASSWORD=dental123
     depends_on:
       - db
     restart: on-failure

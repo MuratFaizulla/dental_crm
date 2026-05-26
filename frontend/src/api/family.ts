@@ -27,13 +27,13 @@ export interface FamilyMemberPayload {
 }
 
 export const RELATION_LABELS: Record<string, string> = {
-  mother:          'Ана',
-  father:          'Әке',
-  son:             'Ұлы',
-  daughter:        'Қызы',
-  adoptive_parent: 'Асырап алушы',
-  grandparent:     'Ата ана',
-  adopted_child:   'Асырап алынған бала',
+  mother:          'Мать',
+  father:          'Отец',
+  son:             'Сын',
+  daughter:        'Дочь',
+  adoptive_parent: 'Усыновитель',
+  grandparent:     'Дедушка/Бабушка',
+  adopted_child:   'Усыновлённый ребёнок',
 }
 
 export async function getFamilyMembers(): Promise<FamilyMember[]> {
