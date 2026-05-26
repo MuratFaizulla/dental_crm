@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getFamilyMembers, addFamilyMember, deleteFamilyMember, RELATION_LABELS, FamilyMemberPayload } from '../../api/family'
+import { getFamilyMembers, addFamilyMember, deleteFamilyMember, RELATION_LABELS } from '../../api/family'
+import type { FamilyMemberPayload } from '../../api/family'
 import styles from './Family.module.css'
 
 const RELATION_OPTIONS = Object.entries(RELATION_LABELS)

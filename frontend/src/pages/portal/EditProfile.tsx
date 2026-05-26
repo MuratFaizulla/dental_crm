@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { getProfile, updateProfile, UpdateProfilePayload } from '../../api/profile'
+import { getProfile, updateProfile } from '../../api/profile'
+import type { UpdateProfilePayload } from '../../api/profile'
 import styles from './EditProfile.module.css'
 
 const LANGUAGE_OPTIONS = [
