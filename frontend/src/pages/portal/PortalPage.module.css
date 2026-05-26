@@ -1,0 +1,78 @@
+.page {
+  padding: 24px;
+  max-width: 900px;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+.tableWrap {
+  background: #fff;
+  border: 1px solid #e8ecf0;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.table th {
+  padding: 10px 14px;
+  text-align: left;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e8ecf0;
+  font-weight: 600;
+  color: #444;
+}
+.table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.amount {
+  font-weight: 600;
+  color: #1a7f37;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status_planned   { background: #e3f2fd; color: #1565c0; }
+.status_in_progress { background: #fff8e1; color: #f57f17; }
+.status_done      { background: #e8f5e9; color: #2e7d32; }
+.status_postponed { background: #fce4ec; color: #c62828; }
+
+.dlBtn {
+  padding: 4px 12px;
+  background: #0969da;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.dlBtn:hover {
+  background: #0757b8;
+}

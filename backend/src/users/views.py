@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -12,6 +13,9 @@ from .serializers import (
     ForgotPasswordSerializer, ResetPasswordSerializer, FamilyMemberSerializer,
     UserManagementSerializer,
 )
+from records.models import Record
+from medical.models import PatientFile, TreatmentPlanItem
+from medical.serializers import PatientFileSerializer, TreatmentPlanItemSerializer
 
 
 class OTPRateThrottle(AnonRateThrottle):
@@ -162,3 +166,62 @@ class SetPasswordView(APIView):
         user.set_password(new_password)
         user.save(update_fields=['password'])
         return Response({'detail': 'Пароль обновлён.'})
+
+
+def _get_client_profile(user):
+    try:
+        return user.client_profile
+    except ObjectDoesNotExist:
+        return None
+
+
+class MyAppointmentsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        client = _get_client_profile(request.user)
+        if client is None:
+            return Response({'detail': 'Пациент профилі табылмады.'}, status=status.HTTP_404_NOT_FOUND)
+        records = (
+            Record.objects
+            .filter(client=client)
+            .select_related('status')
+            .order_by('-reception_day')[:50]
+        )
+        data = [
+            {
+                'id': r.id,
+                'reception_day': r.reception_day,
+                'record_start': r.record_start,
+                'doctors_name': r.doctors_name,
+                'status': r.status.title if r.status else '',
+                'total': r.total,
+                'notes': r.notes,
+            }
+            for r in records
+        ]
+        return Response(data)
+
+
+class MyFilesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        client = _get_client_profile(request.user)
+        if client is None:
+            return Response({'detail': 'Пациент профилі табылмады.'}, status=status.HTTP_404_NOT_FOUND)
+        files = PatientFile.objects.filter(patient=client)
+        ser = PatientFileSerializer(files, many=True, context={'request': request})
+        return Response(ser.data)
+
+
+class MyPlanView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        client = _get_client_profile(request.user)
+        if client is None:
+            return Response({'detail': 'Пациент профилі табылмады.'}, status=status.HTTP_404_NOT_FOUND)
+        items = TreatmentPlanItem.objects.filter(patient=client)
+        ser = TreatmentPlanItemSerializer(items, many=True)
+        return Response(ser.data)

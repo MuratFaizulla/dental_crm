@@ -3,8 +3,11 @@ import { useAuthStore } from '../../store/authStore'
 import styles from './PortalLayout.module.css'
 
 const NAV_ITEMS = [
-  { to: '/portal/profile', label: 'Профиль' },
-  { to: '/portal/family',  label: 'Отбасы' },
+  { to: '/portal/profile',      label: 'Профиль' },
+  { to: '/portal/family',       label: 'Отбасы' },
+  { to: '/portal/appointments', label: 'Визиттер' },
+  { to: '/portal/files',        label: 'Файлдар' },
+  { to: '/portal/plan',         label: 'Ем жоспары' },
 ]
 
 export default function PortalLayout() {

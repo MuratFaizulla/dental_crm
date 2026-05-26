@@ -22,6 +22,9 @@ import Profile from './pages/portal/Profile'
 import EditProfile from './pages/portal/EditProfile'
 import ChangePassword from './pages/portal/ChangePassword'
 import Family from './pages/portal/Family'
+import Appointments from './pages/portal/Appointments'
+import Files from './pages/portal/Files'
+import TreatmentPlan from './pages/portal/TreatmentPlan'
 import ProtectedRoute from './components/ProtectedRoute'
 
 const queryClient = new QueryClient()
@@ -76,6 +79,9 @@ function App() {
             <Route path="profile/edit" element={<EditProfile />} />
             <Route path="profile/password" element={<ChangePassword />} />
             <Route path="family" element={<Family />} />
+            <Route path="appointments" element={<Appointments />} />
+            <Route path="files" element={<Files />} />
+            <Route path="plan" element={<TreatmentPlan />} />
           </Route>
           <Route path="/" element={<RootRedirect />} />
           <Route path="*" element={<RootRedirect />} />
