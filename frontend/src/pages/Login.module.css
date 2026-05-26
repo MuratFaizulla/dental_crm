@@ -82,3 +82,19 @@
   background: #93b8ff;
   cursor: not-allowed;
 }
+
+.registerLink {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+}
+
+.registerLink a {
+  color: #1677ff;
+  text-decoration: none;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
+}

@@ -3,6 +3,7 @@ import { decodeToken } from '../api/auth'
 
 interface AuthState {
   role: 'admin' | 'doctor' | 'patient' | null
+  username: string | null
   email: string | null
   fullName: string | null
   isAuthenticated: boolean
@@ -12,12 +13,12 @@ interface AuthState {
 
 function loadFromToken() {
   const t = localStorage.getItem('access_token')
-  if (!t) return { role: null, email: null, fullName: null }
+  if (!t) return { role: null, username: null, email: null, fullName: null }
   try {
     const p = decodeToken(t)
-    return { role: p.role, email: p.email, fullName: p.full_name }
+    return { role: p.role, username: p.username, email: p.email, fullName: p.full_name }
   } catch {
-    return { role: null, email: null, fullName: null }
+    return { role: null, username: null, email: null, fullName: null }
   }
 }
 
@@ -29,12 +30,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem('access_token', access)
     localStorage.setItem('refresh_token', refresh)
     const p = decodeToken(access)
-    set({ role: p.role, email: p.email, fullName: p.full_name, isAuthenticated: true })
+    set({ role: p.role, username: p.username, email: p.email, fullName: p.full_name, isAuthenticated: true })
   },
 
   logout() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
-    set({ role: null, email: null, fullName: null, isAuthenticated: false })
+    set({ role: null, username: null, email: null, fullName: null, isAuthenticated: false })
   },
 }))

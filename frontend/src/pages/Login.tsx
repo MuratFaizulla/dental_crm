@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { login } from '../api/auth'
 import { useAuthStore } from '../store/authStore'
 import styles from './Login.module.css'
@@ -7,7 +7,7 @@ import styles from './Login.module.css'
 export default function Login() {
   const navigate = useNavigate()
   const setTokens = useAuthStore((s) => s.setTokens)
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,11 +17,11 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      const { access, refresh } = await login(email, password)
+      const { access, refresh } = await login(username, password)
       setTokens(access, refresh)
       navigate('/admin/schedule')
     } catch {
-      setError('Неверный email или пароль')
+      setError('Логин немесе құпиясөз қате')
     } finally {
       setLoading(false)
     }
@@ -31,22 +31,22 @@ export default function Login() {
     <div className={styles.page}>
       <div className={styles.card}>
         <h1 className={styles.title}>Dental CRM</h1>
-        <p className={styles.subtitle}>Войдите в систему</p>
+        <p className={styles.subtitle}>Жүйеге кіру</p>
         <form onSubmit={handleSubmit}>
           <div className={styles.field}>
-            <label className={styles.label}>Email</label>
+            <label className={styles.label}>Логин</label>
             <input
               className={styles.input}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@clinic.kz"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="username"
               required
               autoFocus
             />
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>Пароль</label>
+            <label className={styles.label}>Құпиясөз</label>
             <input
               className={styles.input}
               type="password"
@@ -58,9 +58,12 @@ export default function Login() {
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <button className={styles.button} type="submit" disabled={loading}>
-            {loading ? 'Вход...' : 'Войти'}
+            {loading ? 'Кіру...' : 'Кіру'}
           </button>
         </form>
+        <p className={styles.registerLink}>
+          Аккаунт жоқ па? <Link to="/register">Тіркелу</Link>
+        </p>
       </div>
     </div>
   )
