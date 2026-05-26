@@ -100,7 +100,11 @@ class RecordViewSet(viewsets.ModelViewSet):
 class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
-    permission_classes = [IsAdmin]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAdminOrDoctor()]
+        return [IsAdmin()]
 
 
 class ChairNumViewSet(viewsets.ModelViewSet):
