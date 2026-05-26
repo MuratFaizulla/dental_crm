@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from .models import User, FamilyMember
 from .otp import generate_otp, verify_otp
@@ -13,7 +13,7 @@ from .serializers import (
 
 
 class OTPRateThrottle(AnonRateThrottle):
-    rate = '5/hour'
+    scope = 'otp'  # resolves to DEFAULT_THROTTLE_RATES['otp'] = '5/hour'
 
 
 class RegisterView(APIView):
@@ -70,7 +70,7 @@ class ForgotPasswordView(APIView):
 
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
-    throttle_classes = [OTPRateThrottle]
+    throttle_classes = [OTPRateThrottle, UserRateThrottle]
 
     def post(self, request):
         ser = ResetPasswordSerializer(data=request.data)

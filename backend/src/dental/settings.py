@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dental_base',
         'USER': os.environ.get('DB_USER', 'dental'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'dental123'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': '5432',
     }

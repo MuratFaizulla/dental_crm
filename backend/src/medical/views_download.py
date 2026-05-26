@@ -27,6 +27,6 @@ class PatientFileDownloadView(APIView):
         except FileNotFoundError:
             raise Http404
 
-        response = FileResponse(file_handle, as_attachment=False)
+        response = FileResponse(file_handle, as_attachment=True, filename=pf.file.name.split('/')[-1])
         response['Cache-Control'] = 'private, no-store'
         return response
