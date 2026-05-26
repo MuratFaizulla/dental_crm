@@ -6,9 +6,11 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from .models import User, FamilyMember
 from .otp import generate_otp, verify_otp
+from api.permissions import IsAdmin
 from .serializers import (
     RegisterSerializer, ProfileSerializer, ChangePasswordSerializer,
     ForgotPasswordSerializer, ResetPasswordSerializer, FamilyMemberSerializer,
+    UserManagementSerializer,
 )
 
 
@@ -96,3 +98,67 @@ class FamilyMemberViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class UserManagementView(APIView):
+    permission_classes = [IsAdmin]
+
+    def get(self, request):
+        users = User.objects.filter(
+            role__in=[User.ROLE_ADMIN, User.ROLE_DOCTOR]
+        ).order_by('-created_at')
+        return Response(UserManagementSerializer(users, many=True).data)
+
+    def post(self, request):
+        ser = UserManagementSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(ser.data, status=status.HTTP_201_CREATED)
+
+
+class UserDetailView(APIView):
+    permission_classes = [IsAdmin]
+
+    def _get(self, pk: int):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return None
+
+    def patch(self, request, pk: int):
+        user = self._get(pk)
+        if not user:
+            return Response({'detail': 'Не найдено.'}, status=status.HTTP_404_NOT_FOUND)
+        ser = UserManagementSerializer(user, data=request.data, partial=True)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(ser.data)
+
+    def delete(self, request, pk: int):
+        user = self._get(pk)
+        if not user:
+            return Response({'detail': 'Не найдено.'}, status=status.HTTP_404_NOT_FOUND)
+        if user.pk == request.user.pk:
+            return Response({'detail': 'Нельзя деактивировать себя.'}, status=status.HTTP_400_BAD_REQUEST)
+        user.is_active = False
+        user.save(update_fields=['is_active'])
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SetPasswordView(APIView):
+    permission_classes = [IsAdmin]
+
+    def post(self, request, pk: int):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({'detail': 'Не найдено.'}, status=status.HTTP_404_NOT_FOUND)
+        new_password = request.data.get('new_password', '')
+        if len(new_password) < 8:
+            return Response(
+                {'new_password': 'Минимум 8 символов.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user.set_password(new_password)
+        user.save(update_fields=['password'])
+        return Response({'detail': 'Пароль обновлён.'})

@@ -8,10 +8,13 @@ import ResetPassword from './pages/ResetPassword'
 import Finance from './pages/admin/Finance'
 import Debts from './pages/admin/Debts'
 import AdminLayout from './pages/admin/Layout'
+import Dashboard from './pages/admin/Dashboard'
 import Schedule from './pages/admin/Schedule'
 import Patients from './pages/admin/Patients'
 import PatientCard from './pages/admin/PatientCard'
 import NewRecord from './pages/admin/NewRecord'
+import Users from './pages/admin/Users'
+import ClinicSettingsPage from './pages/admin/ClinicSettings'
 import PortalLayout from './pages/portal/PortalLayout'
 import Profile from './pages/portal/Profile'
 import EditProfile from './pages/portal/EditProfile'
@@ -25,7 +28,7 @@ function RootRedirect() {
   const { isAuthenticated, role } = useAuthStore()
   if (!isAuthenticated) return <Navigate to="/login" replace />
   if (role === 'patient') return <Navigate to="/portal/profile" replace />
-  return <Navigate to="/admin/schedule" replace />
+  return <Navigate to="/admin/dashboard" replace />
 }
 
 function App() {
@@ -45,13 +48,16 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="schedule" replace />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="schedule" element={<Schedule />} />
             <Route path="patients" element={<Patients />} />
             <Route path="patients/:id" element={<PatientCard />} />
             <Route path="records/new" element={<NewRecord />} />
             <Route path="finance" element={<Finance />} />
             <Route path="debts" element={<Debts />} />
+            <Route path="users" element={<Users />} />
+            <Route path="settings" element={<ClinicSettingsPage />} />
           </Route>
           <Route
             path="/portal"

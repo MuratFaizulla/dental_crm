@@ -93,6 +93,29 @@ class ResetPasswordSerializer(serializers.Serializer):
         user.save(update_fields=['password'])
 
 
+class UserManagementSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8, required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'first_name', 'last_name', 'father_name',
+            'email', 'mobile_phone', 'role', 'is_active', 'created_at', 'password',
+        ]
+        read_only_fields = ['id', 'created_at']
+
+    def create(self, validated_data: dict) -> User:
+        password = validated_data.pop('password', None)
+        user = User(**validated_data)
+        user.set_password(password) if password else user.set_unusable_password()
+        user.save()
+        return user
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        validated_data.pop('password', None)
+        return super().update(instance, validated_data)
+
+
 class FamilyMemberSerializer(serializers.ModelSerializer):
     relation_label = serializers.CharField(source='get_relation_type_display', read_only=True)
 
