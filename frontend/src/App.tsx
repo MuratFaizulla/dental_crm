@@ -15,6 +15,7 @@ import PatientCard from './pages/admin/PatientCard'
 import NewRecord from './pages/admin/NewRecord'
 import Users from './pages/admin/Users'
 import ClinicSettingsPage from './pages/admin/ClinicSettings'
+import SMSLog from './pages/admin/SMSLog'
 import PortalLayout from './pages/portal/PortalLayout'
 import Profile from './pages/portal/Profile'
 import EditProfile from './pages/portal/EditProfile'
@@ -58,6 +59,7 @@ function App() {
             <Route path="debts" element={<Debts />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<ClinicSettingsPage />} />
+            <Route path="sms-log" element={<SMSLog />} />
           </Route>
           <Route
             path="/portal"

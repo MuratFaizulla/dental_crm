@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { getPatient } from '../../api/patients'
 import { getRecords } from '../../api/records'
+import { sendSMSReminder } from '../../api/notifications'
 import ToothFormula from '../../components/ToothFormula/ToothFormula'
 import TreatmentPlan from '../../components/TreatmentPlan/TreatmentPlan'
 import PatientFiles from './PatientFiles'
@@ -28,6 +29,12 @@ export default function PatientCard() {
   })
 
   const records = recordsPage?.results ?? []
+
+  const smsMut = useMutation({
+    mutationFn: (recordId: number) => sendSMSReminder(recordId),
+    onSuccess: () => alert('SMS отправлен в очередь'),
+    onError: () => alert('Ошибка отправки SMS'),
+  })
 
   if (isError) {
     return <div className={styles.loading}>Не удалось загрузить карточку пациента. Попробуйте обновить страницу.</div>
@@ -91,6 +98,7 @@ export default function PatientCard() {
                 <th>Дата</th>
                 <th>Врач</th>
                 <th>Статус</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +107,15 @@ export default function PatientCard() {
                   <td>{r.reception_day}</td>
                   <td>{r.doctor_name}</td>
                   <td>{r.status_title}</td>
+                  <td>
+                    <button
+                      style={{ fontSize: '0.75rem', padding: '2px 8px', cursor: 'pointer' }}
+                      disabled={smsMut.isPending}
+                      onClick={() => smsMut.mutate(r.id)}
+                    >
+                      SMS
+                    </button>
+                  </td>
                 </tr>
               ))}
               {records.length === 0 && (

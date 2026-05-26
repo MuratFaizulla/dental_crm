@@ -16,4 +16,5 @@ urlpatterns = [
     path('settings/clinic/', ClinicSettingsView.as_view(), name='clinic-settings'),
     path('settings/chairs/', ChairListView.as_view(), name='chair-list'),
     path('settings/chairs/<int:pk>/', ChairDetailView.as_view(), name='chair-detail'),
+    path('', include('notifications.urls')),
 ]

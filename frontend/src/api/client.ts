@@ -33,3 +33,4 @@ api.interceptors.response.use(
 )
 
 export default api
+export { api as apiClient }

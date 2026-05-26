@@ -13,6 +13,12 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
   backend:
     build: .
     command: >
@@ -27,8 +33,44 @@ services:
     environment:
       - DB_HOST=db
       - DB_PASSWORD=dental123
+      - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
       - db
+      - redis
+    restart: on-failure
+
+  celery:
+    build: .
+    command: >
+      bash -c "cd /DENTAL_CRM/backend/src &&
+               celery -A dental worker -l info -Q default,reminders"
+    volumes:
+      - .:/DENTAL_CRM
+      - media_files:/DENTAL_CRM/backend/src/media
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=dental123
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    restart: on-failure
+
+  celery-beat:
+    build: .
+    command: >
+      bash -c "cd /DENTAL_CRM/backend/src &&
+               celery -A dental beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - .:/DENTAL_CRM
+      - media_files:/DENTAL_CRM/backend/src/media
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=dental123
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
     restart: on-failure
 
   frontend:

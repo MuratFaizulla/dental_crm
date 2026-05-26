@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'corsheaders',
+    # Third-party scheduling
+    'django_celery_beat',
     # Local
     'client',
     'users',
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'api',
     'payments',
     'dashboard',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +168,24 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Celery
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# SMS provider — set SMS_PROVIDER=smskz in env to use real provider
+SMS_PROVIDER = os.environ.get('SMS_PROVIDER', 'stub')
+SMS_KZ_LOGIN = os.environ.get('SMS_KZ_LOGIN', '')
+SMS_KZ_PASSWORD = os.environ.get('SMS_KZ_PASSWORD', '')
+SMS_KZ_SENDER = os.environ.get('SMS_KZ_SENDER', 'DentalCRM')
+
+from celery.schedules import crontab  # noqa: E402
+CELERY_BEAT_SCHEDULE = {
+    'schedule-appointment-reminders': {
+        'task': 'notifications.tasks.schedule_appointment_reminders',
+        'schedule': crontab(minute='*/5'),  # every 5 minutes
+    },
+}

@@ -1,0 +1,16 @@
+.page { padding: 24px; }
+.title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+.hint { color: #666; font-size: 0.875rem; margin-bottom: 20px; }
+.loading, .empty { color: #666; }
+
+.table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.table th, .table td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.table th { background: #f9fafb; font-weight: 600; }
+.table tr:hover td { background: #f9fafb; }
+.msgCell { max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+.statusPending { background: #fef9c3; color: #854d0e; }
+.statusSent { background: #dbeafe; color: #1e40af; }
+.statusDelivered { background: #dcfce7; color: #166534; }
+.statusError { background: #fee2e2; color: #991b1b; }
