@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useAuthStore } from './store/authStore'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
@@ -19,6 +20,13 @@ import Family from './pages/portal/Family'
 import ProtectedRoute from './components/ProtectedRoute'
 
 const queryClient = new QueryClient()
+
+function RootRedirect() {
+  const { isAuthenticated, role } = useAuthStore()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (role === 'patient') return <Navigate to="/portal/profile" replace />
+  return <Navigate to="/admin/schedule" replace />
+}
 
 function App() {
   return (
@@ -59,7 +67,8 @@ function App() {
             <Route path="profile/password" element={<ChangePassword />} />
             <Route path="family" element={<Family />} />
           </Route>
-          <Route path="*" element={<Navigate to="/admin/schedule" replace />} />
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="*" element={<RootRedirect />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

@@ -19,7 +19,7 @@ export default function Login() {
     try {
       const { access, refresh } = await login(username, password)
       setTokens(access, refresh)
-      navigate('/admin/schedule')
+      navigate('/', { replace: true })
     } catch {
       setError('Логин немесе құпиясөз қате')
     } finally {
