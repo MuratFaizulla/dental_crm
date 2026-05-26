@@ -74,11 +74,6 @@ class ChangePasswordSerializer(serializers.Serializer):
 class ForgotPasswordSerializer(serializers.Serializer):
     username = serializers.CharField()
 
-    def validate_username(self, value: str) -> str:
-        if not User.objects.filter(username=value, is_active=True).exists():
-            raise serializers.ValidationError('Мұндай пайдаланушы жоқ.')
-        return value
-
 
 class ResetPasswordSerializer(serializers.Serializer):
     username     = serializers.CharField()
@@ -90,13 +85,21 @@ class ResetPasswordSerializer(serializers.Serializer):
         return value
 
     def save(self) -> None:
-        user = User.objects.get(username=self.validated_data['username'])
+        try:
+            user = User.objects.get(username=self.validated_data['username'], is_active=True)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({'username': 'Пайдаланушы табылмады.'})
         user.set_password(self.validated_data['new_password'])
         user.save(update_fields=['password'])
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
     relation_label = serializers.CharField(source='get_relation_type_display', read_only=True)
+
+    def validate_iin(self, value: str) -> str:
+        if value and (not value.isdigit() or len(value) != 12):
+            raise serializers.ValidationError('ЖСН 12 саннан тұруы керек.')
+        return value
 
     class Meta:
         model = FamilyMember

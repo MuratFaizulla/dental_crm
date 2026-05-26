@@ -111,3 +111,6 @@ class Record(models.Model):
     class Meta:
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
+        indexes = [
+            models.Index(fields=['doctor_id', 'client_id'], name='record_doctor_client_idx'),
+        ]

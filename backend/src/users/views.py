@@ -2,13 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.throttling import AnonRateThrottle
 
-from .models import FamilyMember
+from .models import User, FamilyMember
 from .otp import generate_otp, verify_otp
 from .serializers import (
     RegisterSerializer, ProfileSerializer, ChangePasswordSerializer,
     ForgotPasswordSerializer, ResetPasswordSerializer, FamilyMemberSerializer,
 )
+
+
+class OTPRateThrottle(AnonRateThrottle):
+    rate = '5/hour'
 
 
 class RegisterView(APIView):
@@ -34,7 +39,8 @@ class MeView(APIView):
         return Response(ser.data)
 
     def delete(self, request):
-        request.user.delete()
+        request.user.is_active = False
+        request.user.save(update_fields=['is_active'])
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -50,16 +56,21 @@ class ChangePasswordView(APIView):
 
 class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [OTPRateThrottle]
 
     def post(self, request):
         ser = ForgotPasswordSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        generate_otp(ser.validated_data['username'])
+        username = ser.validated_data['username']
+        # Generate OTP only if user exists — always return same response to prevent enumeration
+        if User.objects.filter(username=username, is_active=True).exists():
+            generate_otp(username)
         return Response({'detail': 'SMS код жіберілді.'})
 
 
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [OTPRateThrottle]
 
     def post(self, request):
         ser = ResetPasswordSerializer(data=request.data)

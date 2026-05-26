@@ -43,14 +43,19 @@ class RecordViewSet(viewsets.ModelViewSet):
         doctor = request.query_params.get('doctor')
         chair = request.query_params.get('chair')
 
+        if not date_from or not date_to:
+            return Response(
+                {'detail': 'date_from және date_to параметрлері міндетті.'},
+                status=400,
+            )
+
         qs = Record.objects.select_related(
             'client', 'doctor', 'chair', 'status',
+        ).filter(
+            reception_day__gte=date_from,
+            reception_day__lte=date_to,
         ).order_by('reception_day', 'record_start')
 
-        if date_from:
-            qs = qs.filter(reception_day__gte=date_from)
-        if date_to:
-            qs = qs.filter(reception_day__lte=date_to)
         if doctor:
             qs = qs.filter(doctor_id=doctor)
         if chair:
