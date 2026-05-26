@@ -9,6 +9,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         token['username'] = user.username
         token['email'] = user.email or ''
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
         token['full_name'] = f'{user.last_name} {user.first_name}'.strip()
         return token
 

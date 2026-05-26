@@ -98,3 +98,18 @@
 .registerLink a:hover {
   text-decoration: underline;
 }
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background: #1677ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+.btn:hover { background: #0958d9; }
+.btn:disabled { background: #93b8ff; cursor: not-allowed; }

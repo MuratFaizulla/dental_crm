@@ -62,6 +62,9 @@ export default function Login() {
           </button>
         </form>
         <p className={styles.registerLink}>
+          <Link to="/forgot-password">Құпиясөзді ұмыттыңыз ба?</Link>
+        </p>
+        <p className={styles.registerLink}>
           Аккаунт жоқ па? <Link to="/register">Тіркелу</Link>
         </p>
       </div>

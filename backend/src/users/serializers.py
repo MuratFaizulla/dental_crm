@@ -1,6 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import User
+from .models import User, FamilyMember
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -38,3 +38,72 @@ class RegisterSerializer(serializers.Serializer):
             mobile_phone=validated_data['mobile_phone'],
             role=User.ROLE_PATIENT,
         )
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'email', 'first_name', 'last_name', 'father_name',
+            'iin', 'date_of_birth', 'gender', 'mobile_phone',
+            'oblast', 'address', 'language', 'avatar', 'role',
+        ]
+        read_only_fields = ['id', 'username', 'role', 'iin']
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+    def validate_old_password(self, value: str) -> str:
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Ескі құпиясөз қате.')
+        return value
+
+    def validate_new_password(self, value: str) -> str:
+        validate_password(value)
+        return value
+
+    def save(self) -> None:
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save(update_fields=['password'])
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+    def validate_username(self, value: str) -> str:
+        if not User.objects.filter(username=value, is_active=True).exists():
+            raise serializers.ValidationError('Мұндай пайдаланушы жоқ.')
+        return value
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    username     = serializers.CharField()
+    code         = serializers.CharField(min_length=6, max_length=6)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+    def validate_new_password(self, value: str) -> str:
+        validate_password(value)
+        return value
+
+    def save(self) -> None:
+        user = User.objects.get(username=self.validated_data['username'])
+        user.set_password(self.validated_data['new_password'])
+        user.save(update_fields=['password'])
+
+
+class FamilyMemberSerializer(serializers.ModelSerializer):
+    relation_label = serializers.CharField(source='get_relation_type_display', read_only=True)
+
+    class Meta:
+        model = FamilyMember
+        fields = [
+            'id', 'relation_type', 'relation_label',
+            'iin', 'last_name', 'first_name', 'father_name',
+            'date_of_birth', 'gender', 'address',
+            'created_at', 'updated_at',
+        ]
+        read_only_fields = ['id', 'relation_label', 'created_at', 'updated_at']
