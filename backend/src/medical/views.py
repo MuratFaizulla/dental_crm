@@ -88,7 +88,7 @@ class PlanListView(ClientAccessMixin, APIView):
 
     def get(self, request, client_id):
         client = self.get_client()
-        plan = TreatmentPlanItem.objects.filter(patient=client)
+        plan = TreatmentPlanItem.objects.select_related('service', 'linked_record').filter(patient=client)
         return Response(TreatmentPlanItemSerializer(plan, many=True).data)
 
     def post(self, request, client_id):
@@ -104,7 +104,10 @@ class PlanDetailView(ClientAccessMixin, APIView):
 
     def patch(self, request, client_id, pk):
         client = self.get_client()
-        item = get_object_or_404(TreatmentPlanItem, pk=pk, patient=client)
+        item = get_object_or_404(
+            TreatmentPlanItem.objects.select_related('service', 'linked_record'),
+            pk=pk, patient=client,
+        )
         serializer = TreatmentPlanItemSerializer(item, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()

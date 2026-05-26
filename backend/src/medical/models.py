@@ -22,6 +22,7 @@ class MedicalNote(models.Model):
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='+'
     )
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -50,6 +51,7 @@ class ToothRecord(models.Model):
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='+'
     )
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -84,6 +86,7 @@ class TreatmentPlanItem(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='treatment_items'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Пункт плана лечения'

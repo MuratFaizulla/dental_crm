@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from api.permissions import IsAdmin, IsAdminOrDoctor
 from .models import Record, Status, ChairNum, RecordingType, PaymentType, PaymentState
 from .serializers import (
-    RecordSerializer, CalendarRecordSerializer,
+    RecordSerializer, CalendarRecordSerializer, CheckConflictSerializer,
     StatusSerializer, ChairNumSerializer,
     RecordingTypeSerializer, PaymentTypeSerializer, PaymentStateSerializer,
 )
@@ -79,20 +79,18 @@ class RecordViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='check-conflict')
     def check_conflict(self, request):
-        doctor_id = request.data.get('doctor')
-        date = request.data.get('date')
-        start = request.data.get('record_start')
-        end = request.data.get('record_end')
-        exclude_id = request.data.get('exclude_id')
+        ser = CheckConflictSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        d = ser.validated_data
 
         qs = Record.objects.filter(
-            doctor_id=doctor_id,
-            reception_day=date,
-            record_start__lt=end,
-            record_end__gt=start,
+            doctor_id=d['doctor'],
+            reception_day=d['date'],
+            record_start__lt=d['record_end'],
+            record_end__gt=d['record_start'],
         )
-        if exclude_id:
-            qs = qs.exclude(id=exclude_id)
+        if d.get('exclude_id'):
+            qs = qs.exclude(id=d['exclude_id'])
 
         return Response({'conflict': qs.exists()})
 

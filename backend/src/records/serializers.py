@@ -57,6 +57,14 @@ class PaymentStateSerializer(serializers.ModelSerializer):
         fields = ["id", "title"]
 
 
+class CheckConflictSerializer(serializers.Serializer):
+    doctor = serializers.IntegerField()
+    date = serializers.DateField()
+    record_start = serializers.TimeField()
+    record_end = serializers.TimeField()
+    exclude_id = serializers.IntegerField(required=False, allow_null=True)
+
+
 class RecordSerializer(serializers.ModelSerializer):
     status_title        = serializers.CharField(source="status.title", read_only=True)
     doctor_name         = serializers.SerializerMethodField()
@@ -79,6 +87,15 @@ class RecordSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["created_at"]
+
+    def validate(self, data):
+        start = data.get('record_start')
+        end = data.get('record_end')
+        if start and end and start >= end:
+            raise serializers.ValidationError(
+                {'record_end': 'Время окончания должно быть позже времени начала.'}
+            )
+        return data
 
     def get_doctor_name(self, obj):
         if obj.doctor:
