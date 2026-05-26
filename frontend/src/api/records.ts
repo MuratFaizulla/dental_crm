@@ -1,6 +1,16 @@
 import api from './client'
 import type { Paginated } from './patients'
 
+export interface RecordStatus {
+  id: number
+  title: string
+}
+
+export async function getStatuses(): Promise<RecordStatus[]> {
+  const { data } = await api.get<{ results: RecordStatus[] }>('/statuses/')
+  return data.results
+}
+
 export interface AppointmentRecord {
   id: number
   client: number

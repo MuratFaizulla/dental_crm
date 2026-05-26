@@ -3,9 +3,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
 from api.permissions import IsAdminOrDoctor
-from records.models import Record
 from users.models import User
 from .models import PatientFile
+from .views import doctor_can_access_client
 
 
 class PatientFileDownloadView(APIView):
@@ -19,16 +19,8 @@ class PatientFileDownloadView(APIView):
         client = pf.patient
         user = request.user
 
-        if user.role == User.ROLE_DOCTOR:
-            try:
-                doctor = user.doctors_profile
-            except Exception:
-                raise Http404
-            if not (
-                client.doctor_id == doctor.pk
-                or Record.objects.filter(doctor_id=doctor.pk, client_id=client.pk).exists()
-            ):
-                raise Http404
+        if user.role == User.ROLE_DOCTOR and not doctor_can_access_client(user, client):
+            raise Http404
 
         try:
             file_handle = pf.file.open('rb')

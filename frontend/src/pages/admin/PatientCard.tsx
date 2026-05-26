@@ -16,7 +16,7 @@ export default function PatientCard() {
   const navigate = useNavigate()
   const [tab, setTab] = useState<Tab>('info')
 
-  const { data: patient, isLoading } = useQuery({
+  const { data: patient, isLoading, isError } = useQuery({
     queryKey: ['patient', clientId],
     queryFn: () => getPatient(clientId),
   })
@@ -28,6 +28,10 @@ export default function PatientCard() {
   })
 
   const records = recordsPage?.results ?? []
+
+  if (isError) {
+    return <div className={styles.loading}>Не удалось загрузить карточку пациента. Попробуйте обновить страницу.</div>
+  }
 
   if (isLoading || !patient) {
     return <div className={styles.loading}>Загрузка...</div>

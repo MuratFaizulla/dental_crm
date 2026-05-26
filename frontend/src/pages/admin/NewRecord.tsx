@@ -1,23 +1,31 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { getDoctors } from '../../api/doctors'
+import { getDoctors, getSpecializations } from '../../api/doctors'
 import { getPatients } from '../../api/patients'
-import { createRecord } from '../../api/records'
+import { getStatuses, createRecord } from '../../api/records'
 import styles from './NewRecord.module.css'
 
 export default function NewRecord() {
   const navigate = useNavigate()
   const today = new Date().toISOString().split('T')[0]
   const [form, setForm] = useState({
-    client: '', doctor: '', reception_day: today,
-    record_start: today, record_end: today, notes: '',
+    client: '',
+    doctor: '',
+    reception_day: today,
+    record_start: '',
+    record_end: '',
+    specialization: '',
+    status: '',
+    notes: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const { data: doctorsData } = useQuery({ queryKey: ['doctors'], queryFn: getDoctors })
   const { data: patientsData } = useQuery({ queryKey: ['patients', ''], queryFn: () => getPatients() })
+  const { data: specializations } = useQuery({ queryKey: ['specializations'], queryFn: getSpecializations })
+  const { data: statuses } = useQuery({ queryKey: ['statuses'], queryFn: getStatuses })
 
   function set(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -34,18 +42,18 @@ export default function NewRecord() {
         ...form,
         client: Number(form.client),
         doctor: Number(form.doctor),
+        specialization: Number(form.specialization),
+        status: Number(form.status),
         client_first_name:  selectedPatient?.first_name  ?? '',
         client_last_name:   selectedPatient?.last_name   ?? '',
         client_father_name: selectedPatient?.father_name ?? '',
         doctors_name:       selectedDoctor?.full_name    ?? '',
         assistant_name: '',
-        specialization: 1,
         tooth: 0,
         specialization_cost: 0,
         count: 1,
         sell: 0,
         total: 0,
-        status: 1,
       })
       navigate('/admin/schedule')
     } catch {
@@ -79,12 +87,34 @@ export default function NewRecord() {
             </select>
           </div>
           <div className={styles.field}>
+            <label className={styles.label}>Специализация</label>
+            <select name="specialization" value={form.specialization} onChange={set} required className={styles.select}>
+              <option value="">Выберите специализацию</option>
+              {specializations?.map((s) => (
+                <option key={s.id} value={s.id}>{s.title}</option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Статус</label>
+            <select name="status" value={form.status} onChange={set} required className={styles.select}>
+              <option value="">Выберите статус</option>
+              {statuses?.map((s) => (
+                <option key={s.id} value={s.id}>{s.title}</option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
             <label className={styles.label}>Дата приёма</label>
             <input type="date" name="reception_day" value={form.reception_day} onChange={set} required className={styles.input} />
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Время начала</label>
-            <input type="date" name="record_start" value={form.record_start} onChange={set} required className={styles.input} />
+            <input type="time" name="record_start" value={form.record_start} onChange={set} required className={styles.input} />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Время окончания</label>
+            <input type="time" name="record_end" value={form.record_end} onChange={set} required className={styles.input} />
           </div>
         </div>
         <div className={styles.field}>

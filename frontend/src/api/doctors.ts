@@ -9,7 +9,19 @@ export interface Doctor {
   services_id: number
 }
 
+export interface Specialization {
+  id: number
+  title: string
+  cost: number
+}
+
+// DoctorViewSet has pagination_class = None — returns a plain array
 export async function getDoctors(): Promise<Doctor[]> {
-  const { data } = await api.get<{ results: Doctor[] }>('/doctors/')
+  const { data } = await api.get<Doctor[]>('/doctors/')
+  return data
+}
+
+export async function getSpecializations(): Promise<Specialization[]> {
+  const { data } = await api.get<{ results: Specialization[] }>('/specializations/')
   return data.results
 }

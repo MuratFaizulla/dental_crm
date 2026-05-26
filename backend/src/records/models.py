@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from client.models import Client
 from doctors.models import Doctors, Assistant, Service, Specialization
@@ -92,13 +94,13 @@ class Record(models.Model):
     count = models.IntegerField("Количество", default=0)
     sell = models.IntegerField("Акции", default=0)
     total = models.IntegerField("Итого", default=0)
-    registration_date = models.DateField("Дата приема", default='datetime.date.today')
+    registration_date = models.DateField("Дата приема", default=datetime.date.today)
     record_start = models.TimeField("Время начала", null=True, blank=True)
     record_end = models.TimeField("Время окончания", null=True, blank=True)
     recording_type = models.ForeignKey(RecordingType, verbose_name="Тип записи", on_delete=models.SET_NULL, null=True)
     notes = models.TextField("Примечания", blank=True, default='')
     reason = models.TextField("Причина", blank=True, default='')
-    reception_day = models.DateField(default='datetime.date.today', db_index=True)
+    reception_day = models.DateField(default=datetime.date.today, db_index=True)
     chair = models.ForeignKey(ChairNum, verbose_name="Номер кабинета", on_delete=models.SET_NULL, null=True)
     payment_type = models.ForeignKey(PaymentType, verbose_name="Тип оплаты", on_delete=models.SET_NULL, null=True)
     payment_state = models.ForeignKey(PaymentState, verbose_name="Состояние оплаты", on_delete=models.SET_NULL, null=True)

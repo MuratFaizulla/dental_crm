@@ -64,6 +64,12 @@ class RecordViewSet(viewsets.ModelViewSet):
         doctor_id = request.query_params.get('doctor')
         date = request.query_params.get('date')
 
+        if not doctor_id or not date:
+            return Response(
+                {'detail': 'Параметры doctor и date обязательны.'},
+                status=400,
+            )
+
         qs = Record.objects.filter(
             doctor_id=doctor_id,
             reception_day=date,

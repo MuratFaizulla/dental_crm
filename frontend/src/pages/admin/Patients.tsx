@@ -10,7 +10,7 @@ export default function Patients() {
   const [q, setQ] = useState('')
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['patients', q],
     queryFn: () => getPatients(q || undefined),
   })
@@ -33,9 +33,12 @@ export default function Patients() {
         onChange={handleSearch}
         placeholder="Поиск по ФИО, телефону, ИИН..."
       />
+      {isError && (
+        <div className={styles.loading}>Не удалось загрузить список пациентов. Попробуйте обновить страницу.</div>
+      )}
       {isLoading ? (
         <div className={styles.loading}>Загрузка...</div>
-      ) : (
+      ) : !isError && (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>

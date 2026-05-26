@@ -19,6 +19,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
 class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctors.objects.select_related('services_id').order_by('last_name', 'first_name')
     serializer_class = DoctorSerializer
+    pagination_class = None
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

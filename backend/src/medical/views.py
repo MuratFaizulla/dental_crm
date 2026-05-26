@@ -1,5 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.shortcuts import get_object_or_404
-from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,21 +15,25 @@ from .serializers import (
 )
 
 
+def doctor_can_access_client(doctor_user, client: Client) -> bool:
+    try:
+        doctor = doctor_user.doctors_profile
+    except ObjectDoesNotExist:
+        return False
+    return (
+        client.doctor_id == doctor.pk
+        or Record.objects.filter(doctor_id=doctor.pk, client_id=client.pk).exists()
+    )
+
+
 class ClientAccessMixin:
     def get_client(self):
-        client_id = self.kwargs['client_id']
-        client = get_object_or_404(Client, pk=client_id)
+        client = get_object_or_404(Client, pk=self.kwargs['client_id'])
         user = self.request.user
         if user.role == 'admin':
             return client
-        if user.role == 'doctor':
-            try:
-                doctor = user.doctors_profile
-            except Exception:
-                raise PermissionDenied
-            if (client.doctor_id == doctor.pk or
-                    Record.objects.filter(doctor_id=doctor.pk, client_id=client.pk).exists()):
-                return client
+        if user.role == 'doctor' and doctor_can_access_client(user, client):
+            return client
         raise PermissionDenied
 
 

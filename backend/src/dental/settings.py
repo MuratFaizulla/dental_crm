@@ -13,20 +13,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-only-replace-before-deploy')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+gof668q-(#mrssa&oo_#!ztzl7m3+h%8=*w8xr_rlcp_(dc#='
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -89,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dental_base',
-        'USER': 'dental',
-        'PASSWORD': 'dental123',
+        'USER': os.environ.get('DB_USER', 'dental'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'dental123'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': '5432',
     }
@@ -159,7 +152,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'TOKEN_OBTAIN_SERIALIZER': 'users.jwt.CustomTokenObtainPairSerializer',
 }
