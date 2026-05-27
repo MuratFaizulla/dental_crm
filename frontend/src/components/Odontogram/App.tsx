@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { destroyOdontogram, initOdontogram, setNumberingSystem, clearSelection, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, getOdontogramState, loadOdontogramState } from "./odontogram";
 export { clearSelection, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, getOdontogramState, loadOdontogramState };
 import { useI18n } from "./i18n/useI18n";
@@ -119,6 +119,7 @@ export default function App({
   const themeRootRef = useRef<HTMLDivElement | null>(null);
   const currentNumbering = numberingSystem ?? internalNumbering;
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(true);
   const [numberingOpen, setNumberingOpen] = useState(false);
   const languageRef = useRef<HTMLDivElement | null>(null);
   const numberingRef = useRef<HTMLDivElement | null>(null);
@@ -317,11 +318,19 @@ export default function App({
           </div>
           <div id="toothGrid" className="tooth-grid" aria-label={t("chart.aria.toothGrid")}></div>
         </section>
-        <aside className="panel">
+        <aside className={`panel${!panelOpen ? " panel--closed" : ""}`}>
           <div className="panel-header">
             <div>
               <div className="panel-title-row">
                 <span className="panel-title">{t("panel.controls")}</span>
+                  <button
+                    className="icon-btn panel-toggle-btn"
+                    onClick={() => setPanelOpen(o => !o)}
+                    title={panelOpen ? "Свернуть панель" : "Развернуть панель"}
+                    aria-label={panelOpen ? "Свернуть панель" : "Развернуть панель"}
+                  >
+                    <span style={{ display: "inline-block", transition: "transform 0.25s", transform: panelOpen ? "rotate(0deg)" : "rotate(180deg)" }}>◀</span>
+                  </button>
                 <div className="panel-title-actions">
                   <button id="btnSelectNone" className="btn btn-ghost btn-icon btn-danger" title={t("panel.clearSelection")} aria-label={t("panel.clearSelection")}>{t("panel.clearSelection")}</button>
                   <button id="btnToggleControlsCard" className="icon-btn" title={t("actions.collapse", { label: t("panel.controls") })} aria-label={t("actions.collapse", { label: t("panel.controls") })}>
@@ -352,7 +361,7 @@ export default function App({
             <div id="warnings" className="warnings"></div>
           </div>
 
-          <div className="panel-body">
+          {panelOpen && <div className="panel-body">
             <section className="card" id="statusCard">
               <div className="card-title card-title-row">
                 <span>{t("status.title")}</span>
@@ -522,9 +531,10 @@ export default function App({
               <div id="modsChecks" className="check-grid"></div>
             </section>
 
-          </div>
+          </div>}
         </aside>
       </main>
     </div>
   );
 }
+

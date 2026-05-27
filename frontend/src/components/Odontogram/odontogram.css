@@ -872,3 +872,38 @@ select:focus{
   .tooth-grid.odon-arch-lower .upper-row,
   .tooth-grid.odon-arch-lower .tooth-label-row:first-child{display:none !important}
 }
+
+/* ── Складываемая панель ───────────────────────────────── */
+.panel--closed {
+  width: 48px !important;
+  min-width: 48px !important;
+  overflow: hidden;
+  padding: 0;
+}
+
+.panel--closed .panel-header {
+  padding: 12px 8px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panel--closed .panel-header > div:first-child > .panel-title-row > span,
+.panel--closed .panel-header > div:first-child > .panel-title-row > .panel-title-actions,
+.panel--closed .panel-subtitle,
+.panel--closed #controlsActions,
+.panel--closed #warnings {
+  display: none;
+}
+
+.panel-toggle-btn {
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px 6px;
+  margin-left: auto;
+  color: #8c8c8c;
+  transition: color 0.15s;
+}
+
+.panel-toggle-btn:hover {
+  color: #1677ff;
+}
