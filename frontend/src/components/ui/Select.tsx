@@ -15,8 +15,16 @@ interface SelectProps {
   disabled?: boolean
   id?: string
   size?: 'sm' | 'md' | 'lg'
+  icon?: React.ReactNode
   className?: string
 }
+
+const PersonIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+  </svg>
+)
 
 export default function Select({
   options,
@@ -27,6 +35,7 @@ export default function Select({
   disabled,
   id,
   size = 'md',
+  icon,
   className = '',
 }: SelectProps) {
   const [open, setOpen] = useState(false)
@@ -47,13 +56,17 @@ export default function Select({
     setOpen(false)
   }
 
-  const wrapperCls = [styles.wrapper, styles[size], className].filter(Boolean).join(' ')
+  const wrapperCls = [styles.wrapper, size !== 'md' ? styles[size] : '', className].filter(Boolean).join(' ')
   const triggerCls = [styles.trigger, open ? styles.triggerOpen : ''].filter(Boolean).join(' ')
-  const arrowCls = [styles.arrow, open ? styles.arrowOpen : ''].filter(Boolean).join(' ')
+  const arrowCls   = [styles.arrow,   open ? styles.arrowOpen  : ''].filter(Boolean).join(' ')
+  const dropdownCls = [styles.dropdown, open ? styles.dropdownOpen : ''].filter(Boolean).join(' ')
+
+  const showIcon = icon !== undefined ? icon : <PersonIcon />
 
   return (
     <div ref={ref} className={wrapperCls} id={id}>
       {label && <span className={styles.label}>{label}</span>}
+
       <button
         type="button"
         className={triggerCls}
@@ -62,38 +75,32 @@ export default function Select({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
+        <span className={styles.icon}>{showIcon}</span>
+
         <span className={[styles.triggerValue, !selected ? styles.placeholder : ''].filter(Boolean).join(' ')}>
           {selected ? selected.label : placeholder}
         </span>
+
         <span className={arrowCls} aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M2 4.5l4.5 4.5 4.5-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </span>
       </button>
 
       {open && (
-        <div className={styles.dropdown} role="listbox">
-          {options.map((opt, i) => {
-            const isSelected = String(opt.value) === String(value)
+        <div className={dropdownCls} role="listbox">
+          {options.map(opt => {
+            const isSel = String(opt.value) === String(value)
             return (
-              <div key={opt.value}>
-                {i > 0 && <div className={styles.divider} />}
-                <div
-                  role="option"
-                  aria-selected={isSelected}
-                  className={[styles.option, isSelected ? styles.optionSelected : ''].filter(Boolean).join(' ')}
-                  onMouseDown={() => handleSelect(opt)}
-                >
-                  <span>{opt.label}</span>
-                  {isSelected && (
-                    <span className={styles.checkIcon} aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M2.5 7.5l3 3 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </span>
-                  )}
-                </div>
+              <div
+                key={opt.value}
+                role="option"
+                aria-selected={isSel}
+                className={[styles.option, isSel ? styles.optionSelected : ''].filter(Boolean).join(' ')}
+                onMouseDown={() => handleSelect(opt)}
+              >
+                {opt.label}
               </div>
             )
           })}

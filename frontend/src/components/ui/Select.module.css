@@ -16,10 +16,9 @@
 .trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   padding: 0 12px;
-  height: 36px;
+  height: 38px;
   background: #fff;
   border: 1.5px solid #d9d9d9;
   border-radius: 8px;
@@ -27,7 +26,7 @@
   font-size: 14px;
   color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.18s;
   outline: none;
   text-align: left;
   user-select: none;
@@ -35,17 +34,19 @@
 }
 
 .trigger:hover {
-  border-color: #1677ff;
-}
-
-.trigger:focus-visible {
-  border-color: #1677ff;
-  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
+  border-color: #52c41a;
 }
 
 .triggerOpen {
-  border-color: #1677ff;
-  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
+  border-color: #52c41a !important;
+  box-shadow: none;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: #8c8c8c;
+  display: flex;
+  align-items: center;
 }
 
 .triggerValue {
@@ -53,6 +54,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 14px;
+  color: #1a1a1a;
 }
 
 .placeholder {
@@ -69,39 +72,36 @@
 
 .arrowOpen {
   transform: rotate(180deg);
-  color: #1677ff;
 }
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 1px);
   left: 0;
   right: 0;
   background: #fff;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid #d9d9d9;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   overflow: hidden;
-  animation: dropDown 0.15s ease;
+  animation: fadeIn 0.12s ease;
 }
 
-@keyframes dropDown {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scaleY(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scaleY(1);
-  }
+.dropdownOpen {
+  border-color: #52c41a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .option {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 9px 12px;
+  padding: 10px 14px;
   font-size: 14px;
   color: #1a1a1a;
   cursor: pointer;
@@ -110,36 +110,20 @@
 }
 
 .option:hover {
-  background: #f0f7ff;
-  color: #1677ff;
+  background: #f6ffed;
 }
 
 .optionSelected {
-  background: #e6f4ff;
-  color: #1677ff;
-  font-weight: 500;
+  color: #52c41a;
+  font-weight: 700;
 }
 
 .optionSelected:hover {
-  background: #bae0ff;
-}
-
-.checkIcon {
-  flex-shrink: 0;
-  color: #1677ff;
-  display: flex;
-  align-items: center;
-}
-
-.divider {
-  height: 1px;
-  background: #f0f0f0;
-  margin: 2px 0;
+  background: #f6ffed;
 }
 
 /* Sizes */
-.sm .trigger { height: 28px; font-size: 13px; padding: 0 10px; border-radius: 6px; }
-.sm .option { padding: 7px 10px; font-size: 13px; }
-
-.lg .trigger { height: 42px; font-size: 15px; padding: 0 14px; border-radius: 10px; }
-.lg .option { padding: 11px 14px; font-size: 15px; }
+.sm .trigger  { height: 30px; font-size: 13px; padding: 0 10px; border-radius: 6px; }
+.sm .option   { padding: 7px 10px; font-size: 13px; }
+.lg .trigger  { height: 44px; font-size: 15px; padding: 0 14px; border-radius: 10px; }
+.lg .option   { padding: 12px 14px; font-size: 15px; }
