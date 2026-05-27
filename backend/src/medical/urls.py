@@ -10,4 +10,5 @@ urlpatterns = [
     path('medical/<int:client_id>/files/', views.FilesListView.as_view()),
     path('medical/<int:client_id>/files/<int:pk>/', views.FileDetailView.as_view()),
     path('medical/files/<int:pk>/download/', views_download.PatientFileDownloadView.as_view()),
+    path('medical/<int:client_id>/odontogram/', views.OdontogramView.as_view()),
 ]

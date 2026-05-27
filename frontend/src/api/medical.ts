@@ -57,3 +57,9 @@ export const updatePlanItem = (clientId: number, itemId: number, data: Partial<T
 
 export const deletePlanItem = (clientId: number, itemId: number) =>
   api.delete(`/medical/${clientId}/plan/${itemId}/`)
+
+export const getOdontogram = (clientId: number) =>
+  api.get<{ odontogram_json: unknown }>(`/medical/${clientId}/odontogram/`).then(r => r.data)
+
+export const saveOdontogram = (clientId: number, odontogram_json: unknown) =>
+  api.put<{ odontogram_json: unknown }>(`/medical/${clientId}/odontogram/`, { odontogram_json }).then(r => r.data)

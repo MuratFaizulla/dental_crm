@@ -157,3 +157,23 @@ class FileDetailView(ClientAccessMixin, APIView):
         file.file.delete(save=False)
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OdontogramView(ClientAccessMixin, APIView):
+    permission_classes = [IsAdminOrDoctor]
+
+    def get(self, request, client_id: int) -> Response:
+        client = self.get_client()
+        note, _ = MedicalNote.objects.get_or_create(
+            patient=client, defaults={'updated_by': request.user}
+        )
+        return Response({'odontogram_json': note.odontogram_json})
+
+    def put(self, request, client_id: int) -> Response:
+        client = self.get_client()
+        note, _ = MedicalNote.objects.get_or_create(
+            patient=client, defaults={'updated_by': request.user}
+        )
+        note.odontogram_json = request.data.get('odontogram_json')
+        note.save(update_fields=['odontogram_json', 'updated_at'])
+        return Response({'odontogram_json': note.odontogram_json})

@@ -19,6 +19,7 @@ class MedicalNote(models.Model):
     anamnesis = models.TextField(blank=True, default='')
     allergies = models.TextField(blank=True, default='')
     notes = models.TextField(blank=True, default='')
+    odontogram_json = models.JSONField(null=True, blank=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='+'
     )

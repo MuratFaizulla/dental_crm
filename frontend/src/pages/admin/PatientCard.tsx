@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { getPatient } from '../../api/patients'
 import { getRecords } from '../../api/records'
 import { sendSMSReminder } from '../../api/notifications'
-import ToothFormula from '../../components/ToothFormula/ToothFormula'
+import OdontogramEditor from '../../components/Odontogram/OdontogramEditor'
 import TreatmentPlan from '../../components/TreatmentPlan/TreatmentPlan'
 import PatientFiles from './PatientFiles'
 import styles from './PatientCard.module.css'
@@ -130,7 +130,7 @@ export default function PatientCard() {
 
       {tab === 'medical' && (
         <div>
-          <ToothFormula clientId={clientId} />
+          <OdontogramEditor clientId={clientId} />
           <TreatmentPlan clientId={clientId} />
         </div>
       )}
