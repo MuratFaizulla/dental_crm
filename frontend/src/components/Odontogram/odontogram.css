@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -948,47 +948,7 @@ select:focus{
   color: #8c8c8c;
 }
 
-/* Стилизованные select */
-.ui-select-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-}
 
-.ui-select-wrap select {
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  background: #fff;
-  border: 1.5px solid #d9d9d9;
-  border-radius: 8px;
-  padding: 6px 28px 6px 10px;
-  font-family: inherit;
-  font-size: 13px;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  outline: none;
-  height: 32px;
-}
-
-.ui-select-wrap select:focus {
-  border-color: #1677ff;
-  box-shadow: 0 0 0 3px rgba(22,119,255,0.12);
-}
-
-.ui-select-wrap::after {
-  content: '';
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-  width: 6px;
-  height: 6px;
-  border-right: 1.5px solid #8c8c8c;
-  border-bottom: 1.5px solid #8c8c8c;
-  pointer-events: none;
-}
 
 /* Чекбоксы */
 .panel input[type="checkbox"] {
@@ -1039,4 +999,18 @@ select:focus{
   padding: 1px 8px;
   font-size: 12px;
   font-weight: 600;
+}
+
+/* panel-body--hidden — скрываем без удаления из DOM (сохраняем vanilla JS listeners) */
+.panel-body--hidden {
+  display: none !important;
+}
+
+/* panel--closed скрывает заголовочные элементы кроме toggle-кнопки */
+.panel--closed .panel-subtitle,
+.panel--closed #controlsActions,
+.panel--closed #warnings,
+.panel--closed .panel-title-actions,
+.panel--closed .panel-title {
+  display: none;
 }

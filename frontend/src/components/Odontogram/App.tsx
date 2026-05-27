@@ -362,7 +362,7 @@ export default function App({
             <div id="warnings" className="warnings"></div>
           </div>
 
-          {panelOpen && <div className="panel-body">
+          <div className={`panel-body${!panelOpen ? " panel-body--hidden" : ""}`}>
             <section className="card" id="statusCard">
               <div className="card-title card-title-row">
                 <span>{t("status.title")}</span>
@@ -378,7 +378,7 @@ export default function App({
               </div>
               <div className="row status-extra-row">
                 <span>{t("status.extraLabel")}</span>
-                <div className="ui-select-wrap"><select id="statusExtraSelect"></select></div>
+                <select id="statusExtraSelect"></select>
                 <Button id="statusExtraApply" variant="primary" size="sm">{t("status.extraApply")}</Button>
               </div>
             </section>
@@ -390,11 +390,11 @@ export default function App({
               </div>
               <div className="row">
                 <span>{t("tooth.baseLabel")}</span>
-                <div className="ui-select-wrap"><select id="toothSelect"></select></div>
+                <select id="toothSelect"></select>
               </div>
               <div id="bridgeUnitRow" className="row">
                 <span>{t("tooth.bridgeLabel")}</span>
-                <div className="ui-select-wrap"><select id="bridgeUnitSelect"></select></div>
+                <select id="bridgeUnitSelect"></select>
               </div>
               <label id="extractionRow" className="row">
                 <input type="checkbox" id="extractionWound" />
@@ -406,7 +406,7 @@ export default function App({
               </label>
               <div id="crownRow" className="row">
                 <span>{t("tooth.crownLabel")}</span>
-                <div className="ui-select-wrap"><select id="crownSelect"></select></div>
+                <select id="crownSelect"></select>
               </div>
               <div id="brokenCrownRow" className="row inline-checks contact-row">
                 <label>
@@ -482,7 +482,7 @@ export default function App({
               </div>
               <div className="row">
                 <span>{t("filling.typeLabel")}</span>
-                <div className="ui-select-wrap"><select id="fillingSelect"></select></div>
+                <select id="fillingSelect"></select>
               </div>
               <div id="fillingSurfaceChecks" className="check-grid hidden"></div>
               <label id="fissureSealingRow" className="row fissure-row">
@@ -500,7 +500,7 @@ export default function App({
               </div>
               <div className="hint">{t("endo.hint")}</div>
               <div className="row">
-                <div className="ui-select-wrap"><select id="endoSelect"></select></div>
+                <select id="endoSelect"></select>
               </div>
               <div className="row inline-checks">
                 <label>
@@ -527,17 +527,18 @@ export default function App({
               </div>
               <div id="mobilityRow" className="row">
                 <span>{t("inflammation.mobilityLabel")}</span>
-                <div className="ui-select-wrap"><select id="mobilitySelect"></select></div>
+                <select id="mobilitySelect"></select>
               </div>
               <div id="modsChecks" className="check-grid"></div>
             </section>
 
-          </div>}
+          </div>
         </aside>
       </main>
     </div>
   );
 }
+
 
 
 
