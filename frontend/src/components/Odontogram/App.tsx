@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
+import { Button } from '../../components/ui';
 import { destroyOdontogram, initOdontogram, setNumberingSystem, clearSelection, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, getOdontogramState, loadOdontogramState } from "./odontogram";
 export { clearSelection, setOcclusalVisible, setWisdomVisible, setShowBase, setHealthyPulpVisible, registerPlugins, setPluginState, getPluginState, getToothStateSummary, setReadOnly, getReadOnly, setNotesEnabled, getNotesEnabled, getOdontogramState, loadOdontogramState };
 import { useI18n } from "./i18n/useI18n";
@@ -332,7 +333,7 @@ export default function App({
                     <span style={{ display: "inline-block", transition: "transform 0.25s", transform: panelOpen ? "rotate(0deg)" : "rotate(180deg)" }}>◀</span>
                   </button>
                 <div className="panel-title-actions">
-                  <button id="btnSelectNone" className="btn btn-ghost btn-icon btn-danger" title={t("panel.clearSelection")} aria-label={t("panel.clearSelection")}>{t("panel.clearSelection")}</button>
+                  <Button id="btnSelectNone" variant="danger" size="sm" title={t("panel.clearSelection")} aria-label={t("panel.clearSelection")}>{t("panel.clearSelection")}</Button>
                   <button id="btnToggleControlsCard" className="icon-btn" title={t("actions.collapse", { label: t("panel.controls") })} aria-label={t("actions.collapse", { label: t("panel.controls") })}>
                     <span className="toggle-icon" aria-hidden="true">−</span>
                   </button>
@@ -341,20 +342,20 @@ export default function App({
               <div className="panel-subtitle">{t("panel.activeTooth")}: <span id="activeToothLabel" className="pill">{t("selection.none")}</span></div>
               <div id="controlsActions" className="panel-subtitle select-actions">
                 <div className="select-actions-row">
-                  <button id="btnSelectAll" className="btn btn-ghost btn-icon" title={t("panel.selectActions.all")}>{t("panel.selectActions.all")}</button>
-                  <button id="btnSelectAllPresent" className="btn btn-ghost btn-icon fade-toggle" title={t("panel.selectActions.present")}>{t("panel.selectActions.present")}</button>
-                  <button id="btnSelectPermanent" className="btn btn-ghost btn-icon fade-toggle" title={t("panel.selectActions.permanent")}>{t("panel.selectActions.permanent")}</button>
-                  <button id="btnSelectMilk" className="btn btn-ghost btn-icon fade-toggle" title={t("panel.selectActions.milk")}>{t("panel.selectActions.milk")}</button>
-                  <button id="btnSelectImplants" className="btn btn-ghost btn-icon fade-toggle" title={t("panel.selectActions.implants")}>{t("panel.selectActions.implants")}</button>
-                  <button id="btnSelectAllMissing" className="btn btn-ghost btn-icon fade-toggle" title={t("panel.selectActions.missing")}>{t("panel.selectActions.missing")}</button>
+                  <Button id="btnSelectAll" variant="ghost" size="sm">{t("panel.selectActions.all")}</Button>
+                  <Button id="btnSelectAllPresent" variant="ghost" size="sm" className="fade-toggle">{t("panel.selectActions.present")}</Button>
+                  <Button id="btnSelectPermanent" variant="ghost" size="sm" className="fade-toggle">{t("panel.selectActions.permanent")}</Button>
+                  <Button id="btnSelectMilk" variant="ghost" size="sm" className="fade-toggle">{t("panel.selectActions.milk")}</Button>
+                  <Button id="btnSelectImplants" variant="ghost" size="sm" className="fade-toggle">{t("panel.selectActions.implants")}</Button>
+                  <Button id="btnSelectAllMissing" variant="ghost" size="sm" className="fade-toggle">{t("panel.selectActions.missing")}</Button>
                 </div>
                 <div className="select-actions-row">
-                  <button id="btnSelectUpper" className="btn btn-ghost btn-icon" title={t("panel.selectActions.upper")}>{t("panel.selectActions.upper")}</button>
-                  <button id="btnSelectUpperFront" className="btn btn-ghost btn-icon" title={t("panel.selectActions.upperFront")}>{t("panel.selectActions.upperFront")}</button>
-                  <button id="btnSelectUpperMolar" className="btn btn-ghost btn-icon" title={t("panel.selectActions.upperMolar")}>{t("panel.selectActions.upperMolar")}</button>
-                  <button id="btnSelectLower" className="btn btn-ghost btn-icon" title={t("panel.selectActions.lower")}>{t("panel.selectActions.lower")}</button>
-                  <button id="btnSelectLowerFront" className="btn btn-ghost btn-icon" title={t("panel.selectActions.lowerFront")}>{t("panel.selectActions.lowerFront")}</button>
-                  <button id="btnSelectLowerMolar" className="btn btn-ghost btn-icon" title={t("panel.selectActions.lowerMolar")}>{t("panel.selectActions.lowerMolar")}</button>
+                  <Button id="btnSelectUpper" variant="ghost" size="sm">{t("panel.selectActions.upper")}</Button>
+                  <Button id="btnSelectUpperFront" variant="ghost" size="sm">{t("panel.selectActions.upperFront")}</Button>
+                  <Button id="btnSelectUpperMolar" variant="ghost" size="sm">{t("panel.selectActions.upperMolar")}</Button>
+                  <Button id="btnSelectLower" variant="ghost" size="sm">{t("panel.selectActions.lower")}</Button>
+                  <Button id="btnSelectLowerFront" variant="ghost" size="sm">{t("panel.selectActions.lowerFront")}</Button>
+                  <Button id="btnSelectLowerMolar" variant="ghost" size="sm">{t("panel.selectActions.lowerMolar")}</Button>
                 </div>
               </div>
             </div>
@@ -370,30 +371,30 @@ export default function App({
                 </button>
               </div>
               <div className="row status-actions" id="statusCardBody">
-                <button id="btnResetAll" className="btn btn-ghost btn-sm">{t("status.resetAll")}</button>
-                <button id="btnPrimaryDentition" className="btn btn-ghost btn-sm">{t("status.primaryDentition")}</button>
-                <button id="btnMixedDentition" className="btn btn-ghost btn-sm">{t("status.mixedDentition")}</button>
+                <Button id="btnResetAll" variant="ghost" size="sm">{t("status.resetAll")}</Button>
+                <Button id="btnPrimaryDentition" variant="ghost" size="sm">{t("status.primaryDentition")}</Button>
+                <Button id="btnMixedDentition" variant="ghost" size="sm">{t("status.mixedDentition")}</Button>
                 <button id="btnEdentulous" className="btn btn-toggle btn-sm" aria-pressed="false">{t("status.edentulous")}</button>
               </div>
               <div className="row status-extra-row">
                 <span>{t("status.extraLabel")}</span>
-                <select id="statusExtraSelect"></select>
-                <button id="statusExtraApply" className="btn btn-ghost btn-sm">{t("status.extraApply")}</button>
+                <div className="ui-select-wrap"><select id="statusExtraSelect"></select></div>
+                <Button id="statusExtraApply" variant="primary" size="sm">{t("status.extraApply")}</Button>
               </div>
             </section>
 
             <section className="card">
               <div className="card-title card-title-row">
                 <span>{t("tooth.title")}</span>
-                <button id="btnResetTooth" className="btn btn-ghost btn-sm" title={t("tooth.resetTitle")} aria-label={t("tooth.resetTitle")}>{t("tooth.reset")}</button>
+                <Button id="btnResetTooth" variant="ghost" size="sm" title={t("tooth.resetTitle")} aria-label={t("tooth.resetTitle")}>{t("tooth.reset")}</Button>
               </div>
               <div className="row">
                 <span>{t("tooth.baseLabel")}</span>
-                <select id="toothSelect"></select>
+                <div className="ui-select-wrap"><select id="toothSelect"></select></div>
               </div>
               <div id="bridgeUnitRow" className="row">
                 <span>{t("tooth.bridgeLabel")}</span>
-                <select id="bridgeUnitSelect"></select>
+                <div className="ui-select-wrap"><select id="bridgeUnitSelect"></select></div>
               </div>
               <label id="extractionRow" className="row">
                 <input type="checkbox" id="extractionWound" />
@@ -405,7 +406,7 @@ export default function App({
               </label>
               <div id="crownRow" className="row">
                 <span>{t("tooth.crownLabel")}</span>
-                <select id="crownSelect"></select>
+                <div className="ui-select-wrap"><select id="crownSelect"></select></div>
               </div>
               <div id="brokenCrownRow" className="row inline-checks contact-row">
                 <label>
@@ -481,7 +482,7 @@ export default function App({
               </div>
               <div className="row">
                 <span>{t("filling.typeLabel")}</span>
-                <select id="fillingSelect"></select>
+                <div className="ui-select-wrap"><select id="fillingSelect"></select></div>
               </div>
               <div id="fillingSurfaceChecks" className="check-grid hidden"></div>
               <label id="fissureSealingRow" className="row fissure-row">
@@ -499,7 +500,7 @@ export default function App({
               </div>
               <div className="hint">{t("endo.hint")}</div>
               <div className="row">
-                <select id="endoSelect"></select>
+                <div className="ui-select-wrap"><select id="endoSelect"></select></div>
               </div>
               <div className="row inline-checks">
                 <label>
@@ -526,7 +527,7 @@ export default function App({
               </div>
               <div id="mobilityRow" className="row">
                 <span>{t("inflammation.mobilityLabel")}</span>
-                <select id="mobilitySelect"></select>
+                <div className="ui-select-wrap"><select id="mobilitySelect"></select></div>
               </div>
               <div id="modsChecks" className="check-grid"></div>
             </section>
@@ -537,4 +538,6 @@ export default function App({
     </div>
   );
 }
+
+
 

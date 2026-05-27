@@ -907,3 +907,136 @@ select:focus{
 .panel-toggle-btn:hover {
   color: #1677ff;
 }
+
+/* ── UI design overrides для панели управления ─────────── */
+
+/* Карточки */
+.panel .card {
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.panel .card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  padding: 10px 14px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  letter-spacing: 0.01em;
+}
+
+.panel .card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel .row {
+  padding: 8px 14px;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.panel .hint {
+  padding: 4px 14px 0;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* Стилизованные select */
+.ui-select-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-select-wrap select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  border: 1.5px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 6px 28px 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  height: 32px;
+}
+
+.ui-select-wrap select:focus {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 3px rgba(22,119,255,0.12);
+}
+
+.ui-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid #8c8c8c;
+  border-bottom: 1.5px solid #8c8c8c;
+  pointer-events: none;
+}
+
+/* Чекбоксы */
+.panel input[type="checkbox"] {
+  accent-color: #1677ff;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.panel label {
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Панель header */
+.panel-header {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: #595959;
+  margin-top: 6px;
+}
+
+/* Группы кнопок выбора зубов */
+.select-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* Pill активного зуба */
+.pill {
+  background: #e6f4ff;
+  color: #1677ff;
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
